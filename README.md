@@ -1,4 +1,4 @@
-# FSP Proposal
+# Javascript Project Proposal
 
 ## Project Description
   An asteroid-like game with a twist.  The player controls multiple ships in a cluster, is unable to shoot, but instead has limited defensive capabilities that he/she must use wisely.  Each one of the ships is a visual representation of the lives the player has and the number of defenses the player has.  When each ship is lost, the player is down one more defense.  All the while, the enemy continues to track the player and grow in number.  The objective is for the player to survive until the time-limit ends.  Multiple levels, with each level subsequently harder then the last.
