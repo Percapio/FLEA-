@@ -1,16 +1,15 @@
 # Javascript Project Proposal
 
 ## Project Description
-  An asteroid-like game with a twist.  The player controls multiple ships in a cluster, is unable to shoot, but instead has limited defensive capabilities that he/she must use wisely.  Each one of the ships is a visual representation of the lives the player has and the number of defenses the player has.  When each ship is lost, the player is down one more defense.  All the while, the enemy continues to track the player and grow in number.  The objective is for the player to survive until the time-limit ends.  Multiple levels, with each level subsequently harder then the last.
+  A frogger-like game with a twist.  The player controls a flea trying to travel from the front door to the kitchen.  The only thing is that the flea has to move quick, or the food would disappear, and the only way to travel quickly is via the backs of the furry inhabitants of the building.  The larger the animals, the easier the target, but the slower they travel, and vice-versa.  Multiple levels, with each level subsequently harder then the last.
   
 
 ### Game Design
   1. User control and interaction between ships and player
-  2. Some AI to assist the player's defensive ships
-  3. More AI to control enemy ships in managing targeting, and attacking the player in a semi-realistic manner
+  2. Pre-programmed/randomized routes for animals
+  3. Collision implementation.
   4. Well thought out level designs.  (Hopefully, up to three completed by Friday)
-  5. Visually appealing (possibly in retro-gaming fashion, like Tron)
-  6. Simple controls (possibly left-arrow and right-arrow keys, and spacebar)
+  6. Simple controls (left-arrow and right-arrow keys, and spacebar)
   7. Intuitive play
 
 
