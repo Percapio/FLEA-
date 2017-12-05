@@ -15,7 +15,6 @@
 
 
 ### MVPs
-
   1. A production ready README.md file
 
   2. A hosting site
@@ -24,21 +23,18 @@
     * Movement
     * Collision
     * Bug-free
+    * Canvas collision artifacts
 
   4. Player < Moving Object Class
     * Player controls
     * Intuitive / Smooth
     * Bug-free
 
-  5. Tracking < Moving Object Class
-    * Tracking logic for AI
-    * Timer
-    * Bug-free
-
-  6. Computer < Tracking
-    * Grows in number as time passes
-    * Tracks enemy player
-    * Bug-free
+  5. Animals < Moving Object Class
+    * Randomly generated moves
+    * Dog < Animals : its own velocity / size / movement constraint
+    * Cat < Animals : its own velocity / size / movement constraint
+    * Rat < Animals : its own velocity / size / movement constraint
   
   7. Modal
     * Basic controls
@@ -48,18 +44,18 @@
 
 
   Bonus:
-  1. Canvas art manipulation
-    * Backdrop grows as timer grows closer to zero
-    * 
+  1. Points System
+    * Based on time completion
+    * Based on animals ridden?
 
 
 ### Wireframes
   Temporary:
 
-  [Mockup 1](wireframes/wireframes_1.jpg)
+  [Mockup 2](wireframes/wireframes_2.jpg)
 
 ### Development Tools
   1. Vanilla JS
   2. Libraries:
       * Anime
-      * 
+      * Canvas
