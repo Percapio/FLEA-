@@ -48,10 +48,30 @@
     * Based on animals ridden?
 
 
+### TimeTable
+  End of day:
+
+  1. Tuesday, Dec. 5 2017
+    * Complete Moving Object Class
+    * Complete Player Object Class
+
+  2. Wednesday, Dec. 6 2017
+    * Complete Animals sub-class
+    * Design Canvas with collision objects (furniture)
+
+  3. Thursday, Dec. 7 2017
+    * Modal
+    * Sprites, sounds
+
+  4. Friday, Dec. 8 2017
+    * README file
+    * Website upload
+
 ### Wireframes
   Temporary:
 
   [Mockup 2](wireframes/wireframes_2.jpg)
+
 
 ### Development Tools
   1. Vanilla JS
