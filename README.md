@@ -5,76 +5,11 @@
   
 
 ### Game Design
-  1. User control and interaction between ships and player
+  1. User control and interaction of flea
   2. Pre-programmed/randomized routes for animals
   3. Collision implementation.
-  4. Well thought out level designs.  (Hopefully, up to three completed by Friday)
+  4. Well thought out level designs. 
   6. Simple controls (left-arrow and right-arrow keys, and spacebar)
   7. Intuitive play
 
 
-### MVPs
-  1. A production ready README.md file
-
-  2. A hosting site
-
-  3. Moving Object Class
-    * Movement
-    * Collision
-    * Bug-free
-    * Canvas collision artifacts
-
-  4. Player < Moving Object Class
-    * Player controls
-    * Intuitive / Smooth
-    * Bug-free
-
-  5. Animals < Moving Object Class
-    * Randomly generated moves
-    * Dog < Animals : its own velocity / size / movement constraint
-    * Cat < Animals : its own velocity / size / movement constraint
-    * Rat < Animals : its own velocity / size / movement constraint
-  
-  7. Modal
-    * Basic controls
-
-  8. User Interface
-    * Smooth / visually appealing
-
-
-  Bonus:
-  1. Points System
-    * Based on time completion
-    * Based on animals ridden?
-
-
-### TimeTable
-  End of day:
-
-  1. Tuesday, Dec. 5 2017
-    * Complete Moving Object Class
-    * Complete Player Object Class
-
-  2. Wednesday, Dec. 6 2017
-    * Complete Animals sub-class
-    * Design Canvas with collision objects (furniture)
-
-  3. Thursday, Dec. 7 2017
-    * Modal
-    * Sprites, sounds
-
-  4. Friday, Dec. 8 2017
-    * README file
-    * Website upload
-
-### Wireframes
-  Temporary:
-
-  [Mockup 2](wireframes/wireframes_2.jpg)
-
-
-### Development Tools
-  1. Vanilla JS
-  2. Libraries:
-      * Anime
-      * Canvas
