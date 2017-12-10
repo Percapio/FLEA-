@@ -1,7 +1,7 @@
-# Javascript Project Proposal
+# FLEA!
 
 ## Project Description
-  A frogger-like game with a twist.  The player controls a flea trying to travel from the front door to the kitchen.  The only thing is that the flea has to move quick, or the food would disappear, and the only way to travel quickly is via the backs of the furry inhabitants of the building.  The larger the animals, the easier the target, but the slower they travel, and vice-versa.  Multiple levels, with each level subsequently harder then the last.
+  A frogger-like game with a twist.  The player controls a flea trying to travel from the door to the kitchen to flee from the lizard.  The only thing is that the flea has to move quick, or the food would disappear, and the only way to travel quickly is via the backs of the furry inhabitants of the building.  The larger the animals, the easier the target, but the slower they travel, and vice-versa.  Multiple levels, with each level subsequently harder then the last.
   
 
 ### Game Design
