@@ -1,23 +1,37 @@
 {
-  "name": "JSP",
+  "name": "gate_is_down",
   "version": "1.0.0",
-  "description": "## Project Description   An asteroid-like game with a twist.  The player controls multiple ships in a cluster, is unable to shoot, but instead has limited defensive capabilities that he/she must use wisely.  Each one of the ships is a visual representation of the lives the player has and the number of defenses the player has.  When each ship is lost, the player is down one more defense.  All the while, the enemy continues to track the player and grow in number.  The objective is for the player to survive until the time-limit ends.  Multiple levels, with each level subsequently harder then the last.",
-  "main": "index.js",
+  "description": "personal website + games",
+  "main": "gis.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./bin/server"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Percapio/FSP.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "javascript",
+    "game",
+    "space",
+    "astroid"
+  ],
+  "author": "Thomas Vu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Percapio/FSP/issues"
   },
   "homepage": "https://github.com/Percapio/FSP#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.28.6"
+  },
   "devDependencies": {
-    "webpack": "^3.10.0"
+    "nodemon": "^1.14.0"
   }
 }
