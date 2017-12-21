@@ -8,23 +8,22 @@ export default class Star {
 		this.radius = 2;
 	}
 
-	update(speed) {
-		// let dx, dy;
+	update(velx, vely, container) {
+		this.y += vely;
+		this.x += velx;
 
-		// this.x = Math.abs( (this.x + dx) % speed );
+		if (this.y > container + 2) {
+			this.y = -1 + Math.random();
+		} else if (this.y < 0) {
+			this.y = container + Math.random();
+		}	
 
-		// if (this.x < 1) {
-		// 	this.x = this.width;
-		// }
+		if (this.x > container + 2) {
+			this.x = -1 + Math.random();
+		} else if (this.x < 0) {
+			this.x = container + Math.random();
+		}
 	}
-
-		// this.x -= speed;
-
-		// if (this.x < 1 || this.y < 1) {
-		// 	this.z = this.width;
-		// 	this.x = Math.random() * this.width;
-		// 	this.y = Math.random() * this.height;
-		// }
 
 	show(ctx) {
 		ctx.beginPath();

@@ -81,11 +81,40 @@ window.addEventListener('DOMContentLoaded', () => {
 	const ctx = canvas.getContext('2d');
 
 	const stars = [];
-	const speed = 0.5;
+	let velx = 1;
+	let vely = 1;
 	let player;
 
+	// Callback functions to move background and determine its velocity
+	function moveUp() {
+		if (vely < 11) {
+			vely += 1;
+		}
+	}
+
+	function moveDown() {
+		if (vely > -11) {
+			vely -= 1;
+		}
+	}
+
+	function moveLeft() {
+		if (velx < 11) {
+			velx += 1;
+		}
+	}
+
+	function moveRight() {
+		if (velx > -11) {
+			velx -= 1;
+		}
+	}
+
+	// Initial setup of player, stars, computer, and board
 	function setup() {
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](DIMENSIONS, DIMENSIONS);
+		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](DIMENSIONS, DIMENSIONS, 
+			() => move().bind(this), 
+			() => velocity().bind(this) );
 
 		for (let i=0; i < 600; i++) {
 			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */](DIMENSIONS, DIMENSIONS);
@@ -100,17 +129,30 @@ window.addEventListener('DOMContentLoaded', () => {
 		ctx.closePath();
 	}
 
+	// Rendering function
 	function play(ctx) {
 		setup();
-		background(ctx);
-		player.show(ctx);
 
-		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx);
-			// stars[i].update(DIMENSIONS);
-		}			
+		setInterval( () => {
+			background(ctx);
+			moveObjects();
+			player.show(ctx);
+			player.update( 
+				() => moveUp(),
+				() => moveDown(),
+				() => moveRight(),
+				() => moveLeft() );
+		}, 40);
 	}
 
+	function moveObjects() {
+		for (let i=0; i < stars.length; i++) {
+			stars[i].show(ctx);
+			stars[i].update(velx, vely, DIMENSIONS);
+		}
+	}
+	
+	// Start the game
 	play(ctx);
 });
 
@@ -129,23 +171,22 @@ class Star {
 		this.radius = 2;
 	}
 
-	update(speed) {
-		// let dx, dy;
+	update(velx, vely, container) {
+		this.y += vely;
+		this.x += velx;
 
-		// this.x = Math.abs( (this.x + dx) % speed );
+		if (this.y > container + 2) {
+			this.y = -1 + Math.random();
+		} else if (this.y < 0) {
+			this.y = container + Math.random();
+		}	
 
-		// if (this.x < 1) {
-		// 	this.x = this.width;
-		// }
+		if (this.x > container + 2) {
+			this.x = -1 + Math.random();
+		} else if (this.x < 0) {
+			this.x = container + Math.random();
+		}
 	}
-
-		// this.x -= speed;
-
-		// if (this.x < 1 || this.y < 1) {
-		// 	this.z = this.width;
-		// 	this.x = Math.random() * this.width;
-		// 	this.y = Math.random() * this.height;
-		// }
 
 	show(ctx) {
 		ctx.beginPath();
@@ -163,17 +204,38 @@ class Star {
 
 "use strict";
 class Player {
-	constructor(width, height) {
+	constructor(width, height, horizontal, velocity) {
 		this.width = width;
 		this.height = height;
+		this.horizontal = horizontal;
 
 		this.x = this.width / 2;
 		this.y = this.height / 2;
 		this.radius = 8;
 	}
 
-	update(speed) {
+	update(up, down, right, left) {
+		window.onkeydown = (e) => {
+			let keypress = event.key;
+			let horizontal;
 
+			switch (keypress) {
+				case 'w':
+					up();
+					break;
+				case 's':
+					down();
+					break;
+				case 'a':
+					left();
+					break;
+				case 'd':
+					right();
+					break;
+				default:
+					return;
+			}
+		}
 	}	
 
 	show(ctx) {
