@@ -39,12 +39,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		player = new Player(DIMENSIONS, DIMENSIONS, 
+		player = new Player(DIMENSIONS, 
 			() => move().bind(this), 
 			() => velocity().bind(this) );
 
-		for (let i=0; i < 600; i++) {
-			stars[i] = new Star(DIMENSIONS, DIMENSIONS);
+		for (let i=0; i < 150; i++) {
+			stars[i] = new Star(DIMENSIONS);
 		}
 	}
 

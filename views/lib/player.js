@@ -1,11 +1,10 @@
 export default class Player {
-	constructor(width, height, horizontal, velocity) {
-		this.width = width;
-		this.height = height;
+	constructor(dimensions, horizontal, velocity) {
+		this.dimensions = dimensions;
 		this.horizontal = horizontal;
 
-		this.x = this.width / 2;
-		this.y = this.height / 2;
+		this.x = this.dimensions / 2;
+		this.y = this.dimensions / 2;
 		this.radius = 8;
 	}
 

@@ -112,12 +112,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](DIMENSIONS, DIMENSIONS, 
+		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](DIMENSIONS, 
 			() => move().bind(this), 
 			() => velocity().bind(this) );
 
-		for (let i=0; i < 600; i++) {
-			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */](DIMENSIONS, DIMENSIONS);
+		for (let i=0; i < 150; i++) {
+			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */](DIMENSIONS);
 		}
 	}
 
@@ -161,36 +161,41 @@ window.addEventListener('DOMContentLoaded', () => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-class Star {
-	constructor(width, height) {
-		this.width = width;
-		this.height = height;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(4);
 
-		this.x = Math.random() * width;
-		this.y = Math.random() * height;
-		this.radius = 2;
+
+class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+	constructor(options) {
+		super(options);
+
+		this.x = Math.random() * this.dimensions;
+		this.y = Math.random() * this.dimensions;
+		this.radius = Math.random() * 3;
+		this.shade = this.COLORS[Math.floor(Math.random() * this.COLORS.length)];
 	}
 
 	update(velx, vely, container) {
-		this.y += vely;
+		let arcLength = 2.1816;
 		this.x += velx;
+		this.y += vely;
 
-		if (this.y > container + 2) {
+
+		if (this.y > container - 2) {
 			this.y = -1 + Math.random();
 		} else if (this.y < 0) {
-			this.y = container + Math.random();
-		}	
+			this.y = container - 4 + Math.random();
+		}
 
-		if (this.x > container + 2) {
+		if (this.x > container - 2) {
 			this.x = -1 + Math.random();
 		} else if (this.x < 0) {
-			this.x = container + Math.random();
-		}
+			this.x = container - 4 + Math.random();
+		} 
 	}
 
 	show(ctx) {
 		ctx.beginPath();
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = this.shade;
 		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
 		ctx.fill();
 	}
@@ -204,13 +209,12 @@ class Star {
 
 "use strict";
 class Player {
-	constructor(width, height, horizontal, velocity) {
-		this.width = width;
-		this.height = height;
+	constructor(dimensions, horizontal, velocity) {
+		this.dimensions = dimensions;
 		this.horizontal = horizontal;
 
-		this.x = this.width / 2;
-		this.y = this.height / 2;
+		this.x = this.dimensions / 2;
+		this.y = this.dimensions / 2;
 		this.radius = 8;
 	}
 
@@ -246,6 +250,46 @@ class Player {
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Player;
+
+
+/***/ }),
+/* 3 */,
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class MovingObject {
+	constructor(dimensions) {
+		this.COLORS = [
+			'#F0E68C',
+			'#40E0D0',
+			'#BDB76B',
+			'#3CB371',
+			'#F4A460',
+			'white',
+			'white',
+			'white',			
+			'white',
+			'white',
+			'white',
+			'white',
+			'white',
+			'white',			
+			'white',
+			'white',
+			'white',
+			'white'
+		];
+
+		this.dimensions = dimensions;
+
+		this.x;
+		this.y;
+		this.radius;
+		this.shade;
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = MovingObject;
 
 
 /***/ })
