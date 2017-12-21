@@ -4,6 +4,8 @@ export default class Star extends MovingObject {
 	constructor(options) {
 		super(options);
 
+		this.velx, this.vely;
+
 		this.x = Math.random() * this.dimensions;
 		this.y = Math.random() * this.dimensions;
 		this.radius = Math.random() * 3;
@@ -15,6 +17,8 @@ export default class Star extends MovingObject {
 		this.x += velx;
 		this.y += vely;
 
+		this.velx = velx;
+		this.vely = vely;
 
 		if (this.y > container - 2) {
 			this.y = -1 + Math.random();

@@ -1,5 +1,6 @@
 import Star from './star';
 import Player from './player';
+import Bug from './bug';
 
 window.addEventListener('DOMContentLoaded', () => {
 	const DIMENSIONS = 600;
@@ -8,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const ctx = canvas.getContext('2d');
 
 	const stars = [];
+	const bugs = [];
 	let velx = 1;
 	let vely = 1;
 	let player;
@@ -46,6 +48,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		for (let i=0; i < 150; i++) {
 			stars[i] = new Star(DIMENSIONS);
 		}
+
+		for (let i=0; i < 50; i++) {
+			bugs[i] = new Bug(DIMENSIONS);
+		}
 	}
 
 	function background(ctx) {
@@ -69,6 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				() => moveDown(),
 				() => moveRight(),
 				() => moveLeft() );
+			moveBugs();
 		}, 40);
 	}
 
@@ -76,6 +83,13 @@ window.addEventListener('DOMContentLoaded', () => {
 		for (let i=0; i < stars.length; i++) {
 			stars[i].show(ctx);
 			stars[i].update(velx, vely, DIMENSIONS);
+		}
+	}
+
+	function moveBugs() {
+		for (let i=0; i < bugs.length; i++) {
+			bugs[i].show(ctx);
+			bugs[i].update(velx, vely, DIMENSIONS);
 		}
 	}
 	

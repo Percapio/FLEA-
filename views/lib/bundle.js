@@ -71,6 +71,8 @@
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__star__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bug__ = __webpack_require__(5);
+
 
 
 
@@ -81,6 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const ctx = canvas.getContext('2d');
 
 	const stars = [];
+	const bugs = [];
 	let velx = 1;
 	let vely = 1;
 	let player;
@@ -119,6 +122,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		for (let i=0; i < 150; i++) {
 			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */](DIMENSIONS);
 		}
+
+		for (let i=0; i < 50; i++) {
+			bugs[i] = new __WEBPACK_IMPORTED_MODULE_2__bug__["a" /* default */](DIMENSIONS);
+		}
 	}
 
 	function background(ctx) {
@@ -142,6 +149,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				() => moveDown(),
 				() => moveRight(),
 				() => moveLeft() );
+			moveBugs();
 		}, 40);
 	}
 
@@ -149,6 +157,13 @@ window.addEventListener('DOMContentLoaded', () => {
 		for (let i=0; i < stars.length; i++) {
 			stars[i].show(ctx);
 			stars[i].update(velx, vely, DIMENSIONS);
+		}
+	}
+
+	function moveBugs() {
+		for (let i=0; i < bugs.length; i++) {
+			bugs[i].show(ctx);
+			bugs[i].update(velx, vely, DIMENSIONS);
 		}
 	}
 	
@@ -168,6 +183,8 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 	constructor(options) {
 		super(options);
 
+		this.velx, this.vely;
+
 		this.x = Math.random() * this.dimensions;
 		this.y = Math.random() * this.dimensions;
 		this.radius = Math.random() * 3;
@@ -179,6 +196,8 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 		this.x += velx;
 		this.y += vely;
 
+		this.velx = velx;
+		this.vely = vely;
 
 		if (this.y > container - 2) {
 			this.y = -1 + Math.random();
@@ -290,6 +309,65 @@ class MovingObject {
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MovingObject;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(4);
+
+
+class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+	constructor(options) {
+		super(options);
+
+		this.x = this.velx > 0 
+			? Math.random() * this.dimensions * - 1 + this.dimensions
+			: Math.random() * this.dimensions + this.dimensions;		
+
+		this.y = this.vely > 0 
+			? Math.random() * this.dimensions * - 1
+			: Math.random() * this.dimensions;
+
+		this.radius = 5;
+		this.shade = 'white';
+		this.hostile = false;
+	}
+
+	update(velx, vely, container) {
+		let arcLength = 2.1816;
+		this.x += velx;
+		this.y += vely;
+
+		if (((this.x > 0) && (this.x < container)) &&
+				((this.y > 0) && (this.y < container))) {
+			this.shade = 'red';
+			this.hostile = true;
+		}
+
+		if (this.y > container - 5) {
+			this.y = -1 + Math.random();
+		} else if (this.y < 0) {
+			this.y = container - 4 + Math.random();
+		}
+
+		if (this.x > container - 5) {
+			this.x = -1 + Math.random();
+		} else if (this.x < 0) {
+			this.x = container - 4 + Math.random();
+		} 
+	}
+
+	show(ctx) {
+		ctx.beginPath();
+		ctx.fillStyle = this.shade;
+		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
+		ctx.fill();
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Bug;
 
 
 /***/ })
