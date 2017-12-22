@@ -1,5 +1,5 @@
 export default class MovingObject {
-	constructor(originPoint, dimensions) {
+	constructor(originPoint) {
 		this.COLORS = [
 			'#F0E68C',
 			'#40E0D0',
@@ -22,7 +22,6 @@ export default class MovingObject {
 		];
 
 		this.originPoint = originPoint;
-		this.dimensions = dimensions;
 
 		this.x;
 		this.y;

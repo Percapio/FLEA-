@@ -18,8 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const stars = [];
 	const bugs = [];
-	let movX = 0;
-	let vely = 10;
+	let vely = 5;
 	let flag = false
 
 	let arcLength = 50 * Math.PI / 180;
@@ -39,21 +38,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	function moveRight() {
 		ctx.rotate(3 * Math.PI / 180);
-		// ctx.setTransform(1, 0, 0, 1, 0, 0);
-		// flag = true;
-		moveObjects();
-		ctx.rotate(-1 * Math.PI / 180);
-		// ctxPlayer.rotate(-3 * Math.PI / 180);
-		// playerX += 10;
-		// ctx.translate( 0, 0 );
-		// movX -= arcLength;
 	}
 
 	function moveLeft() {
-		// ctx.rotate(-3 * Math.PI / 180);
-		// playerX -= 10;
-
-		movX += arcLength
+		ctx.rotate(-3 * Math.PI / 180);
 	}
 
 	function resetFlag() {
@@ -72,14 +60,15 @@ window.addEventListener('DOMContentLoaded', () => {
 			() => velocity().bind(this) );
 
 		for (let i=0; i < 200; i++) {
-			stars[i] = new Star(originPoint, DIMENSIONS);
+			stars[i] = new Star( originPoint );
 		}
-
-		// for (let i=0; i < 50; i++) {
-		// 	bugs[i] = new Bug(originPoint);
-		// }
 	}
 
+	function createBugs() {
+		if (timer.bugSpawn()) {
+			bugs.push(new Bug( originPoint ));
+		}
+	}
 
 	// Background & Backdrop
 	function background() {
@@ -104,6 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
+			createBugs();
 			player.update( 
 				() => moveUp(),
 				() => moveDown(),
@@ -112,23 +102,23 @@ window.addEventListener('DOMContentLoaded', () => {
 			player.show(ctxPlayer);
 			background();
 			moveObjects();
+			moveBugs();
 			backdrop();
-			timer.draw(ctx);
-			// moveBugs();
+			timer.draw(ctxPlayer);
 		}, 20);
 	}
 
 	function moveObjects() {
 		for (let i=0; i < stars.length; i++) {
 			stars[i].show(ctx, flag, () => resetFlag());
-			stars[i].update(movX, vely);
+			stars[i].update(vely);
 		}
 	}
 
 	function moveBugs() {
 		for (let i=0; i < bugs.length; i++) {
 			bugs[i].show(ctx);
-			bugs[i].update(movX, vely);
+			bugs[i].update(vely);
 		}
 	}
 	

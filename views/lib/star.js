@@ -4,8 +4,6 @@ export default class Star extends MovingObject {
 	constructor(options) {
 		super(options);
 
-		this.velx, this.vely;
-
 		this.x = this.randomPoint();
 		this.y = this.randomPoint();
 
@@ -13,13 +11,8 @@ export default class Star extends MovingObject {
 		this.shade = this.COLORS[Math.floor(Math.random() * this.COLORS.length)];
 	}
 
-	update(velx, vely) {
-		// this.x += velx;
-
+	update(vely) {
 		this.y += vely;
-
-		// this.velx = velx;
-		// this.vely = vely;
 
 		if (this.y > this.originPoint) {
 			this.y = -this.originPoint;
@@ -36,9 +29,6 @@ export default class Star extends MovingObject {
 			this.x = this.originPoint;
 			this.y = this.randomPoint();
 		}
-
-		// this.x += velx;
-		// this.y += 1;
 	}
 
 	show(ctx) {

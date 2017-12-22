@@ -50,4 +50,11 @@ export default class Timer {
 		ctx.fillStyle = 'red';
 		ctx.fillText( this.countdown(), 220, -280 );
 	}
+
+	bugSpawn() {
+		if (this.seconds % 12 === 0) {
+			console.log('hi');
+			return true;
+		}
+	}
 }
