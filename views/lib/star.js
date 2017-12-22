@@ -6,31 +6,39 @@ export default class Star extends MovingObject {
 
 		this.velx, this.vely;
 
-		this.x = Math.random() * this.dimensions;
-		this.y = Math.random() * this.dimensions;
+		this.x = this.randomPoint();
+		this.y = this.randomPoint();
+
 		this.radius = Math.random() * 3;
 		this.shade = this.COLORS[Math.floor(Math.random() * this.COLORS.length)];
 	}
 
-	update(velx, vely, container) {
-		let arcLength = 2.1816;
-		this.x += velx;
+	update(velx, vely) {
+		// this.x += velx;
+
 		this.y += vely;
 
-		this.velx = velx;
-		this.vely = vely;
+		// this.velx = velx;
+		// this.vely = vely;
 
-		if (this.y > container - 2) {
-			this.y = -1 + Math.random();
-		} else if (this.y < 0) {
-			this.y = container - 4 + Math.random();
+		if (this.y > this.originPoint) {
+			this.y = -this.originPoint;
+			this.x = this.randomPoint();
+		} else if (this.y < -this.originPoint) {
+			this.y = this.originPoint;
+			this.x = this.randomPoint();
 		}
 
-		if (this.x > container - 2) {
-			this.x = -1 + Math.random();
-		} else if (this.x < 0) {
-			this.x = container - 4 + Math.random();
-		} 
+		if (this.x > this.originPoint) {
+			this.x = -this.originPoint;
+			this.y = this.randomPoint();
+		} else if (this.x < -this.originPoint) {
+			this.x = this.originPoint;
+			this.y = this.randomPoint();
+		}
+
+		// this.x += velx;
+		// this.y += 1;
 	}
 
 	show(ctx) {
@@ -38,5 +46,13 @@ export default class Star extends MovingObject {
 		ctx.fillStyle = this.shade;
 		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
 		ctx.fill();
+		ctx.closePath();
+	}
+
+	randomPoint() {
+		return (
+			( Math.random() * -this.originPoint )
+						+ ( this.originPoint * Math.random() )
+		);
 	}
 };

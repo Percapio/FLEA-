@@ -46,5 +46,6 @@ export default class Bug extends Star {
 		ctx.fillStyle = this.shade;
 		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
 		ctx.fill();
+		ctx.closePath();
 	}
 }
