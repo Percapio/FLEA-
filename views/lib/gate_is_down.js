@@ -4,8 +4,9 @@ import Bug from './bug';
 import Timer from './timer';
 
 window.addEventListener('DOMContentLoaded', () => {
-	const DIMENSIONS = 800;
-	const originPoint = DIMENSIONS / 2;
+	const WIDTH = 1200;
+	const HEIGHT = 500;
+	const originPoint = [ 30, 30 ];
 
 	const canvas = document.getElementById('gateIsDown');
 	const ctx = canvas.getContext('2d');
@@ -15,53 +16,37 @@ window.addEventListener('DOMContentLoaded', () => {
 	const ctxPlayer = canvasPlayer.getContext('2d');
 
 	let timer;
+	const canvasUI = document.getElementById('ui');
+	const ctxUI = canvasUI.getContext('2d');
 
 	const stars = [];
 	const bugs = [];
 	let vely = 5;
-	let flag = false
 
 	let arcLength = 50 * Math.PI / 180;
 
 	// Callback functions to move background and determine its velocity
-	function moveUp() {
-		if (vely < 20) {
-			vely += 5;
-		}
+	function thrusters(vel) {
+		velocity = vel;
 	}
 
-	function moveDown() {
-		if (vely > 9) {
-			vely -= 5;
-		}
-	}
-
-	function moveRight() {
-		ctx.rotate(3 * Math.PI / 180);
-	}
-
-	function moveLeft() {
-		ctx.rotate(-3 * Math.PI / 180);
-	}
-
-	function resetFlag() {
-		flag = false;
+	function turns() {
+		console.log('hi');
 	}
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		ctx.translate( originPoint, originPoint );
-		ctxPlayer.translate( originPoint, originPoint );
+		// ctxPlayer.translate( originPoint[0], originPoint[1] );
+		player = new Player( originPoint, ctxPlayer, WIDTH, HEIGHT,
+			() => thrusters(),
+			() => turns() );
 		
-		timer = new Timer( originPoint );
+		timer = new Timer( WIDTH, 50, ctxUI );
 
-		player = new Player( originPoint,
-			() => move().bind(this), 
-			() => velocity().bind(this) );
-
-		for (let i=0; i < 200; i++) {
-			stars[i] = new Star( originPoint );
-		}
+		// ctx.translate( originPoint, originPoint );
+		// for (let i=0; i < 200; i++) {
+		// 	stars[i] = new Star( WIDTH, HEIGHT );
+		// }
 	}
 
 	function createBugs() {
@@ -74,17 +59,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	function background() {
 		ctx.beginPath();
 		ctx.fillStyle = 'black';
-		ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
+		// ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
+		ctx.rect(0, 0, WIDTH, HEIGHT);
 		ctx.fill();
-		ctx.closePath();
-	}
-
-	function backdrop() {
-		ctx.beginPath();
-		ctx.strokeStyle = '#4682B4';
-		ctx.lineWidth = 170;
-		ctx.arc( 0, 0, originPoint + 145, 0, Math.PI * 2 );
-		ctx.stroke();
 		ctx.closePath();
 	}
 
@@ -93,24 +70,20 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
-			createBugs();
-			player.update( 
-				() => moveUp(),
-				() => moveDown(),
-				() => moveRight(),
-				() => moveLeft() );
-			player.show(ctxPlayer);
+			timer.draw();
+			player.move();
+			player.update();
+			// createBugs();
 			background();
-			moveObjects();
-			moveBugs();
-			backdrop();
-			timer.draw(ctxPlayer);
+			// moveObjects();
+			// moveBugs();
+			// backdrop();
 		}, 20);
 	}
 
 	function moveObjects() {
 		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx, flag, () => resetFlag());
+			stars[i].show(ctx);
 			stars[i].update(vely);
 		}
 	}

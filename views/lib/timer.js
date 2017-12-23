@@ -1,8 +1,10 @@
 export default class Timer {
-	constructor(originPoint) {
-		this.originPoint = originPoint;
+	constructor(width, height, ctx) {
+		this.width = width;
+		this.height = height;
+		this.ctx = ctx;
 
-		this.minute = 2;
+		this.minute = 10;
 		this.seconds = 0;
 		this.milliseconds = 1; 
 	}
@@ -11,9 +13,10 @@ export default class Timer {
 		this.millisecondsCheck();
 		this.secondsCheck();
 		// minuteCheck();
+		let minutes = this.lessThanTen(this.minute);
 		let milliseconds = this.lessThanTen(this.milliseconds);
 		let seconds = this.lessThanTen(this.seconds);
-		return `0${this.minute} : ${seconds} : ${milliseconds}`;
+		return `${minutes} : ${seconds} : ${milliseconds}`;
 	}
 
 	minuteCheck() {
@@ -39,21 +42,22 @@ export default class Timer {
 		return (num < 10) ? '0' + num : num;
 	}
 
-	draw(ctx) {
-		ctx.beginPath();
-		ctx.fillStyle = 'ivory';
-		ctx.rect( 210, -300, 120, 30 );
-		ctx.fill();
-		ctx.closePath();
+	draw() {
+		this.ctx.clearRect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
 
-		ctx.font = '20px Georgia';
-		ctx.fillStyle = 'red';
-		ctx.fillText( this.countdown(), 220, -280 );
+		this.ctx.beginPath();
+		this.ctx.fillStyle = 'ivory';
+		this.ctx.rect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
+		this.ctx.fill();
+		this.ctx.closePath();
+
+		this.ctx.font = '20px Georgia';
+		this.ctx.fillStyle = 'red';
+		this.ctx.fillText( this.countdown(), (this.width / 2 ) - 66, (this.height - 8 ) );
 	}
 
 	bugSpawn() {
 		if (this.seconds % 12 === 0) {
-			console.log('hi');
 			return true;
 		}
 	}

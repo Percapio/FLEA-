@@ -3,18 +3,24 @@
 
 <head>
 	<title>Javascript Project Proposal</title>
-	<script type="application/javascript" src='lib/bundle.js'></script>
-	<style type="text/css" src='./css/style.css'></style>
+	<script type="application/javascript" src='lib/bundle.js'>
+	</script>
+	<link rel= 'stylesheet' type="text/css" href='./css/style.css' />
 </head>
 
 <body>
 
-	<h1>Gate is Down</h1>
-	<div class= 'gateIsDown'>
-		<canvas id= 'player' width= '800' height='800' 
-			style= 'z-index: 1; position: absolute;'></canvas>
-		<canvas id= 'gateIsDown' width= '800' height= '800' 
-			style= 'z-index: 0; position: absolute;'></canvas>
+	<div class= 'container'>
+		<h1>Gate is Down</h1>
+		<div class= 'ui'>
+			<canvas id= 'ui' width= '1200' height= '50'></canvas>
+		</div>
+		<div class= 'canvases'>
+			<canvas id= 'player' width= '1200' height='400' 
+				style= 'z-index: 1; position: absolute;'></canvas>
+			<canvas id= 'gateIsDown' width= '1200' height= '400' 
+				style= 'z-index: 0; position: absolute;'></canvas>
+		</div>
 	</div>
 
 </body>	

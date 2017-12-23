@@ -69,7 +69,7 @@
 
 "use strict";
 class MovingObject {
-	constructor(originPoint) {
+	constructor(width, height) {
 		this.COLORS = [
 			'#F0E68C',
 			'#40E0D0',
@@ -91,7 +91,8 @@ class MovingObject {
 			'white'
 		];
 
-		this.originPoint = originPoint;
+		this.width = width;
+		this.height = height;
 
 		this.x;
 		this.y;
@@ -118,8 +119,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 window.addEventListener('DOMContentLoaded', () => {
-	const DIMENSIONS = 800;
-	const originPoint = DIMENSIONS / 2;
+	const WIDTH = 1200;
+	const HEIGHT = 500;
+	const originPoint = [ 30, 30 ];
 
 	const canvas = document.getElementById('gateIsDown');
 	const ctx = canvas.getContext('2d');
@@ -129,53 +131,37 @@ window.addEventListener('DOMContentLoaded', () => {
 	const ctxPlayer = canvasPlayer.getContext('2d');
 
 	let timer;
+	const canvasUI = document.getElementById('ui');
+	const ctxUI = canvasUI.getContext('2d');
 
 	const stars = [];
 	const bugs = [];
 	let vely = 5;
-	let flag = false
 
 	let arcLength = 50 * Math.PI / 180;
 
 	// Callback functions to move background and determine its velocity
-	function moveUp() {
-		if (vely < 20) {
-			vely += 5;
-		}
+	function thrusters(vel) {
+		velocity = vel;
 	}
 
-	function moveDown() {
-		if (vely > 9) {
-			vely -= 5;
-		}
-	}
-
-	function moveRight() {
-		ctx.rotate(3 * Math.PI / 180);
-	}
-
-	function moveLeft() {
-		ctx.rotate(-3 * Math.PI / 180);
-	}
-
-	function resetFlag() {
-		flag = false;
+	function turns() {
+		console.log('hi');
 	}
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		ctx.translate( originPoint, originPoint );
-		ctxPlayer.translate( originPoint, originPoint );
+		// ctxPlayer.translate( originPoint[0], originPoint[1] );
+		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( originPoint, ctxPlayer, WIDTH, HEIGHT,
+			() => thrusters(),
+			() => turns() );
 		
-		timer = new __WEBPACK_IMPORTED_MODULE_3__timer__["a" /* default */]( originPoint );
+		timer = new __WEBPACK_IMPORTED_MODULE_3__timer__["a" /* default */]( WIDTH, 50, ctxUI );
 
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( originPoint,
-			() => move().bind(this), 
-			() => velocity().bind(this) );
-
-		for (let i=0; i < 200; i++) {
-			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */]( originPoint );
-		}
+		// ctx.translate( originPoint, originPoint );
+		// for (let i=0; i < 200; i++) {
+		// 	stars[i] = new Star( WIDTH, HEIGHT );
+		// }
 	}
 
 	function createBugs() {
@@ -188,17 +174,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	function background() {
 		ctx.beginPath();
 		ctx.fillStyle = 'black';
-		ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
+		// ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
+		ctx.rect(0, 0, WIDTH, HEIGHT);
 		ctx.fill();
-		ctx.closePath();
-	}
-
-	function backdrop() {
-		ctx.beginPath();
-		ctx.strokeStyle = '#4682B4';
-		ctx.lineWidth = 170;
-		ctx.arc( 0, 0, originPoint + 145, 0, Math.PI * 2 );
-		ctx.stroke();
 		ctx.closePath();
 	}
 
@@ -207,24 +185,20 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
-			createBugs();
-			player.update( 
-				() => moveUp(),
-				() => moveDown(),
-				() => moveRight(),
-				() => moveLeft() );
-			player.show(ctxPlayer);
+			timer.draw();
+			player.move();
+			player.update();
+			// createBugs();
 			background();
-			moveObjects();
-			moveBugs();
-			backdrop();
-			timer.draw(ctxPlayer);
+			// moveObjects();
+			// moveBugs();
+			// backdrop();
 		}, 20);
 	}
 
 	function moveObjects() {
 		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx, flag, () => resetFlag());
+			stars[i].show(ctx);
 			stars[i].update(vely);
 		}
 	}
@@ -294,7 +268,7 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 		);
 	}
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Star;
+/* unused harmony export default */
 ;
 
 /***/ }),
@@ -303,59 +277,139 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 
 "use strict";
 class Player {
-	constructor(originPoint, horizontal, velocity) {
-		this.originPoint = originPoint;
-		this.horizontal = horizontal;
+	constructor(origin, ctx, width, height, thrusters, turns) {
+		this.origin = origin;
+		this.ctx = ctx;
+		this.width = width;
+		this.height = height;
 
-		this.y = 50;
-		this.radius = 8;
+		this.radius = 4;
+		this.rotation = 0;
+
+		this.vel = [ 0, 0 ];
+		this.thrusters = thrusters;
+
+		this.head = this.drawSide(0);
 	}
 
-	update(up, down, right, left) {
+	move(thrusters, banking) {
 		window.onkeydown = (e) => {
 			let keypress = event.key;
-			let horizontal;
 
 			switch (keypress) {
 				case 'w':
-					up();
+					this.thrust(true, false);
+					// this.thrusters();
 					break;
 				case 's':
-					down();
+					this.thrust(false, true);
 					break;
 				case 'a':
-					left();
-					// this.x -= arcLength;
-					// this.y -= arcLength;
+					this.turn(true, false);
 					break;
 				case 'd':
-					right();
-					// this.x += 10;
-					// this.y -= 1;
+					this.turn(false, true);
 					break;
 				default:
 					return;
 			}
 		}
-	}	
-
-	show(ctx) {
-		// ctx.beginPath();
-		// ctx.fillStyle = rgba(0, 0, 0, 0.1);
-		// ctx.rect(0, 0, this.originPoint * 2, this.originPoint * 2);
-		// ctx.fill();
-		// ctx.closePath();
-
-		ctx.clearRect(0, 0, this.originPoint * 2, this.originPoint * 2);
-		ctx.beginPath();
-		ctx.fillStyle = 'green';
-		ctx.arc( 0, this.y, this.radius, 0, Math.PI * 2 );
-		ctx.fill();
-		ctx.closePath();
 	}
 
-	move() {
+	update() {
+		this.momentum();
+		this.show();
+	}
 
+	show() {
+		this.ctx.clearRect(this.origin[0] - 100, this.origin[1] - 100, this.origin[0] + 100, this.origin[1] + 100);
+
+		this.ctx.beginPath();
+		this.ctx.fillStyle = 'green';
+		// this.ctx.strokeStyle = 'green';
+		// this.ctx.arc( this.originPoint[0], this.originPoint[1], this.radius, 0, Math.PI * 2 );
+		// this.ctx.moveTo( this.x - 10, this.y - 10 );
+		// this.ctx.lineTo( this.x - 10, this.y );
+		// this.ctx.lineTo( this.x, this.y - 5 );
+
+		this.head = this.drawSide(0);
+		this.ctx.lineTo( this.head[0], this.head[1] );
+
+		for (let i=1; i < 3; i++) {
+			let sides = this.drawSide(i);
+			this.ctx.lineTo( sides[0], sides[1] );
+		}
+
+		// this.ctx.stroke();
+		this.ctx.fill();
+		this.ctx.closePath();
+	}
+
+	drawSide(i) {
+		let sides = Math.PI * 2 / 3;
+		let results = [ this.origin[0] + this.radius * Math.cos( sides * i + this.rotation ),
+										this.origin[1] + this.radius * Math.sin( sides * i + this.rotation ) ];
+		return results;
+	}
+
+	thrust(pwr = false, breaks = false) {
+		let speed = 0.0872665;
+
+		if (pwr && this.vel[0] < 2 && this.vel[1] < 2) {
+			this.boost(0, speed);
+			this.boost(1, speed);
+		}
+
+		if (breaks && this.vel[0] > speed && this.vel[1] > speed) {
+			this.breaking(0, speed);
+			this.breaking(0, speed);
+		}
+	}
+
+	boost(pos, speed) {
+		if (this.origin[pos] < this.head[pos]) {
+			this.vel[pos] += speed; 
+		} else if (this.origin[pos] > this.head[pos]) {
+			this.vel[pos] -= speed;
+		}
+	}
+
+	breaking(pos, speed) {
+		if (this.origin[pos] < this.head[pos]) {
+			this.vel[pos] -= speed;
+		} else if (this.origin[pos] > this.head[pos]) {
+			this.vel[pos] -= speed;
+		}
+	}
+
+	momentum() {
+		this.origin[0] += this.vel[0];
+		this.origin[1] += this.vel[1];
+	}
+
+	turn(left = false, right = false) {
+		let arcLength = 0.2617994;
+
+		if (left) {
+			this.rotation -= arcLength;
+			this.head[0] -= arcLength;
+			this.head[1] -= arcLength;
+		}
+
+		if (right) {
+			this.rotation += arcLength;
+			this.head[1] += arcLength;
+			this.head[1] += arcLength;
+		}
+	}
+
+	backdrop() {
+		this.ctx.beginPath();
+		this.ctx.strokeStyle = 'black';
+		this.ctx.lineWidth = 170;
+		this.ctx.arc( this.originPoint[0], this.originPoint[1], 25, 0, Math.PI * 2 );
+		this.ctx.stroke();
+		this.ctx.closePath();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Player;
@@ -382,11 +436,10 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 	}
 
 	update(vely) {
-		this.y += vely;
+		this.y += 1;
 
-		if (this.y > this.originPoint) {
-			this.y = -this.originPoint;
-			this.x = this.randomPoint();
+		if (this.y > 0) {
+			this.y -= 1;
 		} else if (this.y < -this.originPoint) {
 			this.y = this.originPoint;
 			this.x = this.randomPoint();
@@ -425,10 +478,12 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 
 "use strict";
 class Timer {
-	constructor(originPoint) {
-		this.originPoint = originPoint;
+	constructor(width, height, ctx) {
+		this.width = width;
+		this.height = height;
+		this.ctx = ctx;
 
-		this.minute = 2;
+		this.minute = 10;
 		this.seconds = 0;
 		this.milliseconds = 1; 
 	}
@@ -437,9 +492,10 @@ class Timer {
 		this.millisecondsCheck();
 		this.secondsCheck();
 		// minuteCheck();
+		let minutes = this.lessThanTen(this.minute);
 		let milliseconds = this.lessThanTen(this.milliseconds);
 		let seconds = this.lessThanTen(this.seconds);
-		return `0${this.minute} : ${seconds} : ${milliseconds}`;
+		return `${minutes} : ${seconds} : ${milliseconds}`;
 	}
 
 	minuteCheck() {
@@ -465,21 +521,22 @@ class Timer {
 		return (num < 10) ? '0' + num : num;
 	}
 
-	draw(ctx) {
-		ctx.beginPath();
-		ctx.fillStyle = 'ivory';
-		ctx.rect( 210, -300, 120, 30 );
-		ctx.fill();
-		ctx.closePath();
+	draw() {
+		this.ctx.clearRect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
 
-		ctx.font = '20px Georgia';
-		ctx.fillStyle = 'red';
-		ctx.fillText( this.countdown(), 220, -280 );
+		this.ctx.beginPath();
+		this.ctx.fillStyle = 'ivory';
+		this.ctx.rect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
+		this.ctx.fill();
+		this.ctx.closePath();
+
+		this.ctx.font = '20px Georgia';
+		this.ctx.fillStyle = 'red';
+		this.ctx.fillText( this.countdown(), (this.width / 2 ) - 66, (this.height - 8 ) );
 	}
 
 	bugSpawn() {
 		if (this.seconds % 12 === 0) {
-			console.log('hi');
 			return true;
 		}
 	}

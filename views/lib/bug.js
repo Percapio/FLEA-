@@ -13,11 +13,10 @@ export default class Bug extends MovingObject {
 	}
 
 	update(vely) {
-		this.y += vely;
+		this.y += 1;
 
-		if (this.y > this.originPoint) {
-			this.y = -this.originPoint;
-			this.x = this.randomPoint();
+		if (this.y > 0) {
+			this.y -= 1;
 		} else if (this.y < -this.originPoint) {
 			this.y = this.originPoint;
 			this.x = this.randomPoint();
