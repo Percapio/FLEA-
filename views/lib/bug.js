@@ -11,27 +11,8 @@ export default class Bug extends MovingObject {
 		this.shade = 'red';
 
 		for (let i=0; i < 3; i++) {
-			this.checkBug();
+			this.checkLocation(this.radius);
 		}
-	}
-
-	update(vely) {
-		// this.y += 1;
-
-		// if (this.y > 0) {
-		// 	this.y -= 1;
-		// } else if (this.y < -this.originPoint) {
-		// 	this.y = this.originPoint;
-		// 	this.x = this.randomPoint();
-		// }
-
-		// if (this.x > this.originPoint) {
-		// 	this.x = -this.originPoint;
-		// 	this.y = this.randomPoint();
-		// } else if (this.x < -this.originPoint) {
-		// 	this.x = this.originPoint;
-		// 	this.y = this.randomPoint();
-		// }
 	}
 
 	show() {
@@ -42,7 +23,7 @@ export default class Bug extends MovingObject {
 		this.ctx.closePath();
 	}
 
-	spotPlayer(origin, hostile = false, radius) {
+	move(origin, hostile = false, endGame) {
 		let rangeX = Math.abs(this.pos[0] - origin[0]);
 		let rangeY = Math.abs(this.pos[1] - origin[1]);
 
@@ -57,8 +38,7 @@ export default class Bug extends MovingObject {
 			this.show();
 		}
 
-		this.collisionCheck(origin[0], radius);
-		this.collisionCheck(origin[1], radius);
+		this.collisionCheck(origin) ? endGame() : null;
 	}
 
 	guideBug(pos, origin, speed) {
@@ -66,13 +46,6 @@ export default class Bug extends MovingObject {
 			this.pos[pos] += speed;
 		} else if ( this.pos[pos] > origin[pos] ) {
 			this.pos[pos] -= speed;
-		}
-	}
-
-	checkBug() {
-		if (this.outsideBorder(this.pos, this.radius)) {
-			this.pos = [ Math.random() * ( this.width - 50 ) + 40, 
-								Math.random() * ( this.height - 50 ) + 40 ];
 		}
 	}
 }

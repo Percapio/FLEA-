@@ -11,26 +11,6 @@ export default class Star extends MovingObject {
 		this.shade = this.COLORS[Math.floor(Math.random() * this.COLORS.length)];
 	}
 
-	update(vely) {
-		// this.y += vely;
-
-		// if (this.y > this.originPoint) {
-		// 	this.y = -this.originPoint;
-		// 	this.x = this.randomPoint();
-		// } else if (this.y < -this.originPoint) {
-		// 	this.y = this.originPoint;
-		// 	this.x = this.randomPoint();
-		// }
-
-		// if (this.x > this.originPoint) {
-		// 	this.x = -this.originPoint;
-		// 	this.y = this.randomPoint();
-		// } else if (this.x < -this.originPoint) {
-		// 	this.x = this.originPoint;
-		// 	this.y = this.randomPoint();
-		// }
-	}
-
 	show() {
 		this.ctx.beginPath();
 		this.ctx.fillStyle = this.shade;

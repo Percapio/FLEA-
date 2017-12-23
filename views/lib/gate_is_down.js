@@ -1,11 +1,14 @@
 import Star from './star';
 import Player from './player';
 import Bug from './bug';
+import Hazard from './hazard';
 import Timer from './timer';
+import Gate from './gate';
+import Fog from './fog';
 
 window.addEventListener('DOMContentLoaded', () => {
 	const WIDTH = 1200;
-	const HEIGHT = 500;
+	const HEIGHT = 400;
 	const origin = [ 30, 30 ];
 
 	const canvas = document.getElementById('gateIsDown');
@@ -14,30 +17,37 @@ window.addEventListener('DOMContentLoaded', () => {
 	let player;
 	const canvasPlayer = document.getElementById('player');
 	const ctxPlayer = canvasPlayer.getContext('2d');
-	const playerRadius = 5;
 
-	let timer;
+	let gate, fog, timer;
 	const canvasUI = document.getElementById('ui');
 	const ctxUI = canvasUI.getContext('2d');
 
 	const stars = [];
 	const bugs = [];
+	const hazards = [];
 	let hostile = false;
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
 		timer = new Timer( WIDTH, 50, ctxUI );
+		gate = new Gate( WIDTH, HEIGHT, ctx );
+
+		fog = new Fog( WIDTH, HEIGHT, ctxPlayer );
 		player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
 			() => thrusters(origin) );
 		
 
 		for (let i=0; i < 350; i++) {
 			stars[i] = new Star( WIDTH, HEIGHT, ctx );
-		}
 
-		for (let j=0; j < 20; j++) {
-			bugs[j] = new Bug( WIDTH, HEIGHT, ctx );
-		}
+			if (i < 21) {
+				bugs[i] = new Bug( WIDTH, HEIGHT, ctx );
+
+				if (i < 11) {
+					hazards[i] = new Hazard( WIDTH, HEIGHT, ctx );
+				};
+			};
+		};
 	}
 
 	// Background & Backdrop
@@ -51,6 +61,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		for (let i=0; i < stars.length; i++) {
 			stars[i].show(ctx);
 		}
+
+		gate.show(origin);
 	}
 
 	// Rendering function
@@ -59,36 +71,42 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		setInterval( () => {
 			background();
+			moveObjects();
 			timer.draw();
 			player.move();
 			player.update();
-			// createBugs();
-			// moveObjects();
-			moveBugs(ctx);
-			// backdrop();
 		}, 20);
 	}
 
 	function moveObjects() {
-
-	}
-
-	// Handle enemies
-	function moveBugs() {
 		for (let i=0; i < bugs.length; i++) {
-			bugs[i].spotPlayer(origin, hostile, playerRadius);
+			bugs[i].move(origin, hostile,
+				() => endGame());
 			bugs[i].show(ctx);
+
+			if (i < hazards.length) {
+				hazards[i].move(origin, 
+					() => endGame());
+				hazards[i].show(ctx);
+			}
 		}
 
 		hostile = false;
+		fog.render(origin);
 	}
 
+	// Handle enemies
 	function thrusters(originPlayer = origin) {
 		origin[0] = originPlayer[0];
 		origin[1] = originPlayer[1];
 		hostile = true;
 
-		moveBugs();
+		moveObjects();
+	}
+
+	// End of game
+	function endGame() {
+		console.log('YOU DIED.');
 	}
 
 	// Start the game

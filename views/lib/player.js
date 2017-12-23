@@ -72,7 +72,7 @@ export default class Player extends MovingObject {
 	}
 
 	thrust(pwr = false, breaks = false) {
-		if (pwr && this.vel[0] < 2 && this.vel[1] < 2) {
+		if (pwr && this.vel[0] < 1 && this.vel[1] < 1) {
 			this.boost(0);
 			this.boost(1);
 		}
