@@ -69,7 +69,7 @@
 
 "use strict";
 class MovingObject {
-	constructor(width, height) {
+	constructor(width, height, ctx) {
 		this.COLORS = [
 			'#F0E68C',
 			'#40E0D0',
@@ -93,11 +93,21 @@ class MovingObject {
 
 		this.width = width;
 		this.height = height;
+		this.ctx = ctx;
 
 		this.x;
 		this.y;
 		this.radius;
 		this.shade;
+	}
+
+	backdrop() {
+		this.ctx.beginPath();
+		this.ctx.strokeStyle = 'black';
+		this.ctx.lineWidth = 170;
+		this.ctx.arc( this.x, this.y, 25, 0, Math.PI * 2 );
+		this.ctx.stroke();
+		this.ctx.closePath();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MovingObject;
@@ -151,17 +161,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		// ctxPlayer.translate( originPoint[0], originPoint[1] );
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( originPoint, ctxPlayer, WIDTH, HEIGHT,
+		timer = new __WEBPACK_IMPORTED_MODULE_3__timer__["a" /* default */]( WIDTH, 50, ctxUI );
+		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer, originPoint,
 			() => thrusters(),
 			() => turns() );
 		
-		timer = new __WEBPACK_IMPORTED_MODULE_3__timer__["a" /* default */]( WIDTH, 50, ctxUI );
 
-		// ctx.translate( originPoint, originPoint );
-		// for (let i=0; i < 200; i++) {
-		// 	stars[i] = new Star( WIDTH, HEIGHT );
-		// }
+		for (let i=0; i < 350; i++) {
+			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */]( WIDTH, HEIGHT, ctx );
+		}
 	}
 
 	function createBugs() {
@@ -174,10 +182,13 @@ window.addEventListener('DOMContentLoaded', () => {
 	function background() {
 		ctx.beginPath();
 		ctx.fillStyle = 'black';
-		// ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
 		ctx.rect(0, 0, WIDTH, HEIGHT);
 		ctx.fill();
 		ctx.closePath();
+		
+		for (let i=0; i < stars.length; i++) {
+			stars[i].show(ctx);
+		}
 	}
 
 	// Rendering function
@@ -185,11 +196,11 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
+			background();
 			timer.draw();
 			player.move();
 			player.update();
 			// createBugs();
-			background();
 			// moveObjects();
 			// moveBugs();
 			// backdrop();
@@ -197,10 +208,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function moveObjects() {
-		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx);
-			stars[i].update(vely);
-		}
+
 	}
 
 	function moveBugs() {
@@ -223,52 +231,45 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-	constructor(options) {
-		super(options);
+	constructor(width, height, ctx) {
+		super(width, height, ctx);
 
-		this.x = this.randomPoint();
-		this.y = this.randomPoint();
+		this.x = Math.random() * this.width;
+		this.y = Math.random() * this.height;
 
-		this.radius = Math.random() * 3;
+		this.radius = Math.random() * 1;
 		this.shade = this.COLORS[Math.floor(Math.random() * this.COLORS.length)];
 	}
 
 	update(vely) {
-		this.y += vely;
+		// this.y += vely;
 
-		if (this.y > this.originPoint) {
-			this.y = -this.originPoint;
-			this.x = this.randomPoint();
-		} else if (this.y < -this.originPoint) {
-			this.y = this.originPoint;
-			this.x = this.randomPoint();
-		}
+		// if (this.y > this.originPoint) {
+		// 	this.y = -this.originPoint;
+		// 	this.x = this.randomPoint();
+		// } else if (this.y < -this.originPoint) {
+		// 	this.y = this.originPoint;
+		// 	this.x = this.randomPoint();
+		// }
 
-		if (this.x > this.originPoint) {
-			this.x = -this.originPoint;
-			this.y = this.randomPoint();
-		} else if (this.x < -this.originPoint) {
-			this.x = this.originPoint;
-			this.y = this.randomPoint();
-		}
+		// if (this.x > this.originPoint) {
+		// 	this.x = -this.originPoint;
+		// 	this.y = this.randomPoint();
+		// } else if (this.x < -this.originPoint) {
+		// 	this.x = this.originPoint;
+		// 	this.y = this.randomPoint();
+		// }
 	}
 
-	show(ctx) {
-		ctx.beginPath();
-		ctx.fillStyle = this.shade;
-		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
-		ctx.fill();
-		ctx.closePath();
-	}
-
-	randomPoint() {
-		return (
-			( Math.random() * -this.originPoint )
-						+ ( this.originPoint * Math.random() )
-		);
+	show() {
+		this.ctx.beginPath();
+		this.ctx.fillStyle = this.shade;
+		this.ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
+		this.ctx.fill();
+		this.ctx.closePath();
 	}
 }
-/* unused harmony export default */
+/* harmony export (immutable) */ __webpack_exports__["a"] = Star;
 ;
 
 /***/ }),
@@ -276,14 +277,15 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-class Player {
-	constructor(origin, ctx, width, height, thrusters, turns) {
-		this.origin = origin;
-		this.ctx = ctx;
-		this.width = width;
-		this.height = height;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
 
-		this.radius = 4;
+
+class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+	constructor(width, height, ctx, origin, thrusters, turns) {
+		super(width, height, ctx);
+		this.origin = origin;
+
+		this.radius = 5;
 		this.rotation = 0;
 
 		this.vel = [ 0, 0 ];
@@ -318,19 +320,14 @@ class Player {
 
 	update() {
 		this.momentum();
-		this.show();
+		this.render();
 	}
 
-	show() {
+	render() {
 		this.ctx.clearRect(this.origin[0] - 100, this.origin[1] - 100, this.origin[0] + 100, this.origin[1] + 100);
 
 		this.ctx.beginPath();
-		this.ctx.fillStyle = 'green';
-		// this.ctx.strokeStyle = 'green';
-		// this.ctx.arc( this.originPoint[0], this.originPoint[1], this.radius, 0, Math.PI * 2 );
-		// this.ctx.moveTo( this.x - 10, this.y - 10 );
-		// this.ctx.lineTo( this.x - 10, this.y );
-		// this.ctx.lineTo( this.x, this.y - 5 );
+		this.ctx.fillStyle = 'white';
 
 		this.head = this.drawSide(0);
 		this.ctx.lineTo( this.head[0], this.head[1] );
@@ -340,8 +337,10 @@ class Player {
 			this.ctx.lineTo( sides[0], sides[1] );
 		}
 
-		// this.ctx.stroke();
 		this.ctx.fill();
+		this.ctx.strokeStyle = 'green';
+		this.ctx.arc( this.head[0], this.head[1], 0.5, 0, Math.PI * 2 );
+		this.ctx.stroke();
 		this.ctx.closePath();
 	}
 
@@ -401,15 +400,6 @@ class Player {
 			this.head[1] += arcLength;
 			this.head[1] += arcLength;
 		}
-	}
-
-	backdrop() {
-		this.ctx.beginPath();
-		this.ctx.strokeStyle = 'black';
-		this.ctx.lineWidth = 170;
-		this.ctx.arc( this.originPoint[0], this.originPoint[1], 25, 0, Math.PI * 2 );
-		this.ctx.stroke();
-		this.ctx.closePath();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Player;

@@ -36,17 +36,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
-		// ctxPlayer.translate( originPoint[0], originPoint[1] );
-		player = new Player( originPoint, ctxPlayer, WIDTH, HEIGHT,
+		timer = new Timer( WIDTH, 50, ctxUI );
+		player = new Player( WIDTH, HEIGHT, ctxPlayer, originPoint,
 			() => thrusters(),
 			() => turns() );
 		
-		timer = new Timer( WIDTH, 50, ctxUI );
 
-		// ctx.translate( originPoint, originPoint );
-		// for (let i=0; i < 200; i++) {
-		// 	stars[i] = new Star( WIDTH, HEIGHT );
-		// }
+		for (let i=0; i < 350; i++) {
+			stars[i] = new Star( WIDTH, HEIGHT, ctx );
+		}
 	}
 
 	function createBugs() {
@@ -59,10 +57,13 @@ window.addEventListener('DOMContentLoaded', () => {
 	function background() {
 		ctx.beginPath();
 		ctx.fillStyle = 'black';
-		// ctx.arc( 0, 50, DIMENSIONS, 0, Math.PI * 2 );
 		ctx.rect(0, 0, WIDTH, HEIGHT);
 		ctx.fill();
 		ctx.closePath();
+		
+		for (let i=0; i < stars.length; i++) {
+			stars[i].show(ctx);
+		}
 	}
 
 	// Rendering function
@@ -70,11 +71,11 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
+			background();
 			timer.draw();
 			player.move();
 			player.update();
 			// createBugs();
-			background();
 			// moveObjects();
 			// moveBugs();
 			// backdrop();
@@ -82,10 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function moveObjects() {
-		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx);
-			stars[i].update(vely);
-		}
+
 	}
 
 	function moveBugs() {

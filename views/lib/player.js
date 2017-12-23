@@ -1,11 +1,11 @@
-export default class Player {
-	constructor(origin, ctx, width, height, thrusters, turns) {
-		this.origin = origin;
-		this.ctx = ctx;
-		this.width = width;
-		this.height = height;
+import MovingObject from './moving_object';
 
-		this.radius = 4;
+export default class Player extends MovingObject {
+	constructor(width, height, ctx, origin, thrusters, turns) {
+		super(width, height, ctx);
+		this.origin = origin;
+
+		this.radius = 5;
 		this.rotation = 0;
 
 		this.vel = [ 0, 0 ];
@@ -40,19 +40,14 @@ export default class Player {
 
 	update() {
 		this.momentum();
-		this.show();
+		this.render();
 	}
 
-	show() {
+	render() {
 		this.ctx.clearRect(this.origin[0] - 100, this.origin[1] - 100, this.origin[0] + 100, this.origin[1] + 100);
 
 		this.ctx.beginPath();
-		this.ctx.fillStyle = 'green';
-		// this.ctx.strokeStyle = 'green';
-		// this.ctx.arc( this.originPoint[0], this.originPoint[1], this.radius, 0, Math.PI * 2 );
-		// this.ctx.moveTo( this.x - 10, this.y - 10 );
-		// this.ctx.lineTo( this.x - 10, this.y );
-		// this.ctx.lineTo( this.x, this.y - 5 );
+		this.ctx.fillStyle = 'white';
 
 		this.head = this.drawSide(0);
 		this.ctx.lineTo( this.head[0], this.head[1] );
@@ -62,8 +57,10 @@ export default class Player {
 			this.ctx.lineTo( sides[0], sides[1] );
 		}
 
-		// this.ctx.stroke();
 		this.ctx.fill();
+		this.ctx.strokeStyle = 'green';
+		this.ctx.arc( this.head[0], this.head[1], 0.5, 0, Math.PI * 2 );
+		this.ctx.stroke();
 		this.ctx.closePath();
 	}
 
@@ -123,14 +120,5 @@ export default class Player {
 			this.head[1] += arcLength;
 			this.head[1] += arcLength;
 		}
-	}
-
-	backdrop() {
-		this.ctx.beginPath();
-		this.ctx.strokeStyle = 'black';
-		this.ctx.lineWidth = 170;
-		this.ctx.arc( this.originPoint[0], this.originPoint[1], 25, 0, Math.PI * 2 );
-		this.ctx.stroke();
-		this.ctx.closePath();
 	}
 }
