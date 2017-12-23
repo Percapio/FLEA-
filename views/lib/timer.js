@@ -55,10 +55,4 @@ export default class Timer {
 		this.ctx.fillStyle = 'red';
 		this.ctx.fillText( this.countdown(), (this.width / 2 ) - 66, (this.height - 8 ) );
 	}
-
-	bugSpawn() {
-		if (this.seconds % 12 === 0) {
-			return true;
-		}
-	}
 }

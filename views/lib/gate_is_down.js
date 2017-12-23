@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	let player;
 	const canvasPlayer = document.getElementById('player');
 	const ctxPlayer = canvasPlayer.getContext('2d');
+	const playerRadius = 5;
 
 	let timer;
 	const canvasUI = document.getElementById('ui');
@@ -75,10 +76,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Handle enemies
 	function moveBugs() {
 		for (let i=0; i < bugs.length; i++) {
-			bugs[i].spotPlayer(origin, hostile);
+			bugs[i].spotPlayer(origin, hostile, playerRadius);
 			bugs[i].show(ctx);
 		}
-		
+
 		hostile = false;
 	}
 
@@ -87,7 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		origin[1] = originPlayer[1];
 		hostile = true;
 
-		moveBugs(hostile);
+		moveBugs();
 	}
 
 	// Start the game

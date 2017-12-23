@@ -9,6 +9,10 @@ export default class Bug extends MovingObject {
 
 		this.radius = 5;
 		this.shade = 'red';
+
+		for (let i=0; i < 3; i++) {
+			this.checkBug();
+		}
 	}
 
 	update(vely) {
@@ -38,28 +42,37 @@ export default class Bug extends MovingObject {
 		this.ctx.closePath();
 	}
 
-	spotPlayer(origin, hostile = false) {
+	spotPlayer(origin, hostile = false, radius) {
 		let rangeX = Math.abs(this.pos[0] - origin[0]);
 		let rangeY = Math.abs(this.pos[1] - origin[1]);
 
 		if (rangeX < 150 && rangeY < 150) {
-			if (hostile) {
-
-				this.guideBug(0, origin);
-				this.guideBug(1, origin);
-			}
+			this.guideBug(0, origin, this.CONST[1]);
+			this.guideBug(1, origin, this.CONST[1]);
 		}
 
-		this.show();
+		if (hostile) {
+			this.guideBug(0, origin, this.CONST[2]);
+			this.guideBug(1, origin, this.CONST[2]);
+			this.show();
+		}
+
+		this.collisionCheck(origin[0], radius);
+		this.collisionCheck(origin[1], radius);
 	}
 
-	guideBug(pos, origin) {
-		let speed = 5;
-
+	guideBug(pos, origin, speed) {
 		if ( this.pos[pos] < origin[pos] ) {
 			this.pos[pos] += speed;
 		} else if ( this.pos[pos] > origin[pos] ) {
 			this.pos[pos] -= speed;
+		}
+	}
+
+	checkBug() {
+		if (this.outsideBorder(this.pos, this.radius)) {
+			this.pos = [ Math.random() * ( this.width - 50 ) + 40, 
+								Math.random() * ( this.height - 50 ) + 40 ];
 		}
 	}
 }

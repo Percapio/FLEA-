@@ -20,9 +20,8 @@ export default class Player extends MovingObject {
 
 			switch (keypress) {
 				case 'w':
-					let hostile = true
 					this.thrust(true, false);
-					this.thrusters(this.origin, hostile);
+					this.thrusters(this.origin, this.radius);
 					break;
 				case 's':
 					this.thrust(false, true);
@@ -73,53 +72,54 @@ export default class Player extends MovingObject {
 	}
 
 	thrust(pwr = false, breaks = false) {
-		let speed = 0.0872665;
-
 		if (pwr && this.vel[0] < 2 && this.vel[1] < 2) {
-			this.boost(0, speed);
-			this.boost(1, speed);
+			this.boost(0);
+			this.boost(1);
 		}
 
-		if (breaks && this.vel[0] > speed && this.vel[1] > speed) {
-			this.breaking(0, speed);
-			this.breaking(0, speed);
-		}
-	}
-
-	boost(pos, speed) {
-		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] += speed; 
-		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= speed;
+		if (breaks && this.vel[0] > this.CONST[1] && this.vel[1] > this.CONST[1]) {
+			this.breaking(0);
+			this.breaking(0);
 		}
 	}
 
-	breaking(pos, speed) {
+	boost(pos) {
 		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] -= speed;
+			this.vel[pos] += this.CONST[1]; 
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= speed;
+			this.vel[pos] -= this.CONST[1];
+		}
+	}
+
+	breaking(pos) {
+		if (this.origin[pos] < this.head[pos]) {
+			this.vel[pos] -= this.CONST[1];
+		} else if (this.origin[pos] > this.head[pos]) {
+			this.vel[pos] -= this.CONST[1];
 		}
 	}
 
 	momentum() {
-		this.origin[0] += this.vel[0];
-		this.origin[1] += this.vel[1];
+		if (this.outsideBorder(this.origin, this.radius)) {
+			this.origin[0] = this.bounceWidth(this.origin[0], this.radius);
+			this.origin[1] = this.bounceHeight(this.origin[1], this.radius);
+		} else {
+			this.origin[0] += this.vel[0];
+			this.origin[1] += this.vel[1];			
+		}
 	}
 
 	turn(left = false, right = false) {
-		let arcLength = 0.2617994;
-
 		if (left) {
-			this.rotation -= arcLength;
-			this.head[0] -= arcLength;
-			this.head[1] -= arcLength;
+			this.rotation -= this.CONST[0];
+			this.head[0] -= this.CONST[0];
+			this.head[1] -= this.CONST[0];
 		}
 
 		if (right) {
-			this.rotation += arcLength;
-			this.head[1] += arcLength;
-			this.head[1] += arcLength;
+			this.rotation += this.CONST[0];
+			this.head[1] += this.CONST[0];
+			this.head[1] += this.CONST[0];
 		}
 	}
 }
