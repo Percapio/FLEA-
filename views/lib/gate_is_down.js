@@ -6,7 +6,7 @@ import Timer from './timer';
 window.addEventListener('DOMContentLoaded', () => {
 	const WIDTH = 1200;
 	const HEIGHT = 500;
-	const originPoint = [ 30, 30 ];
+	const origin = [ 30, 30 ];
 
 	const canvas = document.getElementById('gateIsDown');
 	const ctx = canvas.getContext('2d');
@@ -21,35 +21,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const stars = [];
 	const bugs = [];
-	let vely = 5;
-
-	let arcLength = 50 * Math.PI / 180;
-
-	// Callback functions to move background and determine its velocity
-	function thrusters(vel) {
-		velocity = vel;
-	}
-
-	function turns() {
-		console.log('hi');
-	}
+	let hostile = false;
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
 		timer = new Timer( WIDTH, 50, ctxUI );
-		player = new Player( WIDTH, HEIGHT, ctxPlayer, originPoint,
-			() => thrusters(),
-			() => turns() );
+		player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
+			() => thrusters(origin) );
 		
 
 		for (let i=0; i < 350; i++) {
 			stars[i] = new Star( WIDTH, HEIGHT, ctx );
 		}
-	}
 
-	function createBugs() {
-		if (timer.bugSpawn()) {
-			bugs.push(new Bug( originPoint ));
+		for (let j=0; j < 20; j++) {
+			bugs[j] = new Bug( WIDTH, HEIGHT, ctx );
 		}
 	}
 
@@ -77,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			player.update();
 			// createBugs();
 			// moveObjects();
-			// moveBugs();
+			moveBugs(ctx);
 			// backdrop();
 		}, 20);
 	}
@@ -86,13 +72,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	}
 
+	// Handle enemies
 	function moveBugs() {
 		for (let i=0; i < bugs.length; i++) {
+			bugs[i].spotPlayer(origin, hostile);
 			bugs[i].show(ctx);
-			bugs[i].update(vely);
 		}
+		
+		hostile = false;
 	}
-	
+
+	function thrusters(originPlayer = origin) {
+		origin[0] = originPlayer[0];
+		origin[1] = originPlayer[1];
+		hostile = true;
+
+		moveBugs(hostile);
+	}
+
 	// Start the game
 	play(ctx);
 });

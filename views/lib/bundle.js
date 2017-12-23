@@ -94,20 +94,15 @@ class MovingObject {
 		this.width = width;
 		this.height = height;
 		this.ctx = ctx;
-
-		this.x;
-		this.y;
-		this.radius;
-		this.shade;
 	}
 
-	backdrop() {
-		this.ctx.beginPath();
-		this.ctx.strokeStyle = 'black';
-		this.ctx.lineWidth = 170;
-		this.ctx.arc( this.x, this.y, 25, 0, Math.PI * 2 );
-		this.ctx.stroke();
-		this.ctx.closePath();
+	backdrop(origin, ctx) {
+		ctx.beginPath();
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 170;
+		ctx.arc( origin[0], origin[1], 25, 0, Math.PI * 2 );
+		ctx.stroke();
+		ctx.closePath();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MovingObject;
@@ -131,7 +126,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 window.addEventListener('DOMContentLoaded', () => {
 	const WIDTH = 1200;
 	const HEIGHT = 500;
-	const originPoint = [ 30, 30 ];
+	const origin = [ 30, 30 ];
 
 	const canvas = document.getElementById('gateIsDown');
 	const ctx = canvas.getContext('2d');
@@ -146,35 +141,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const stars = [];
 	const bugs = [];
-	let vely = 5;
-
-	let arcLength = 50 * Math.PI / 180;
-
-	// Callback functions to move background and determine its velocity
-	function thrusters(vel) {
-		velocity = vel;
-	}
-
-	function turns() {
-		console.log('hi');
-	}
+	let hostile = false;
 
 	// Initial setup of player, stars, computer, and board
 	function setup() {
 		timer = new __WEBPACK_IMPORTED_MODULE_3__timer__["a" /* default */]( WIDTH, 50, ctxUI );
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer, originPoint,
-			() => thrusters(),
-			() => turns() );
+		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer, origin,
+			() => thrusters(origin) );
 		
 
 		for (let i=0; i < 350; i++) {
 			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */]( WIDTH, HEIGHT, ctx );
 		}
-	}
 
-	function createBugs() {
-		if (timer.bugSpawn()) {
-			bugs.push(new __WEBPACK_IMPORTED_MODULE_2__bug__["a" /* default */]( originPoint ));
+		for (let j=0; j < 20; j++) {
+			bugs[j] = new __WEBPACK_IMPORTED_MODULE_2__bug__["a" /* default */]( WIDTH, HEIGHT, ctx );
 		}
 	}
 
@@ -202,7 +183,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			player.update();
 			// createBugs();
 			// moveObjects();
-			// moveBugs();
+			moveBugs(ctx);
 			// backdrop();
 		}, 20);
 	}
@@ -211,13 +192,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	}
 
+	// Handle enemies
 	function moveBugs() {
 		for (let i=0; i < bugs.length; i++) {
+			bugs[i].spotPlayer(origin, hostile);
 			bugs[i].show(ctx);
-			bugs[i].update(vely);
 		}
+		
+		hostile = false;
 	}
-	
+
+	function thrusters(originPlayer = origin) {
+		origin[0] = originPlayer[0];
+		origin[1] = originPlayer[1];
+		hostile = true;
+
+		moveBugs(hostile);
+	}
+
 	// Start the game
 	play(ctx);
 });
@@ -281,7 +273,7 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 
 
 class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-	constructor(width, height, ctx, origin, thrusters, turns) {
+	constructor(width, height, ctx, origin, thrusters) {
 		super(width, height, ctx);
 		this.origin = origin;
 
@@ -300,8 +292,9 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 			switch (keypress) {
 				case 'w':
+					let hostile = true
 					this.thrust(true, false);
-					// this.thrusters();
+					this.thrusters(this.origin, hostile);
 					break;
 				case 's':
 					this.thrust(false, true);
@@ -414,49 +407,66 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 
 class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-	constructor(options) {
-		super(options);
+	constructor(width, height, ctx) {
+		super(width, height, ctx);
 
-		this.x = this.randomPoint();
-		this.y = -this.originPoint - 20;
+		this.pos = [ Math.random() * ( this.width - 50 ) + 40, 
+								Math.random() * ( this.height - 50 ) + 40 ];
 
 		this.radius = 5;
 		this.shade = 'red';
-		this.hostile = false;
 	}
 
 	update(vely) {
-		this.y += 1;
+		// this.y += 1;
 
-		if (this.y > 0) {
-			this.y -= 1;
-		} else if (this.y < -this.originPoint) {
-			this.y = this.originPoint;
-			this.x = this.randomPoint();
-		}
+		// if (this.y > 0) {
+		// 	this.y -= 1;
+		// } else if (this.y < -this.originPoint) {
+		// 	this.y = this.originPoint;
+		// 	this.x = this.randomPoint();
+		// }
 
-		if (this.x > this.originPoint) {
-			this.x = -this.originPoint;
-			this.y = this.randomPoint();
-		} else if (this.x < -this.originPoint) {
-			this.x = this.originPoint;
-			this.y = this.randomPoint();
-		}
+		// if (this.x > this.originPoint) {
+		// 	this.x = -this.originPoint;
+		// 	this.y = this.randomPoint();
+		// } else if (this.x < -this.originPoint) {
+		// 	this.x = this.originPoint;
+		// 	this.y = this.randomPoint();
+		// }
 	}
 
-	show(ctx) {
-		ctx.beginPath();
-		ctx.fillStyle = this.shade;
-		ctx.arc( this.x, this.y, this.radius, 0, Math.PI * 2 );
-		ctx.fill();
-		ctx.closePath();
+	show() {
+		this.ctx.beginPath();
+		this.ctx.fillStyle = this.shade;
+		this.ctx.arc( this.pos[0], this.pos[1], this.radius, 0, Math.PI * 2 );
+		this.ctx.fill();
+		this.ctx.closePath();
 	}
 
-	randomPoint() {
-		return (
-			( Math.random() * -this.originPoint )
-						+ ( this.originPoint * Math.random() )
-		);
+	spotPlayer(origin, hostile = false) {
+		let rangeX = Math.abs(this.pos[0] - origin[0]);
+		let rangeY = Math.abs(this.pos[1] - origin[1]);
+
+		if (rangeX < 150 && rangeY < 150) {
+			if (hostile) {
+
+				this.guideBug(0, origin);
+				this.guideBug(1, origin);
+			}
+		}
+
+		this.show();
+	}
+
+	guideBug(pos, origin) {
+		let speed = 5;
+
+		if ( this.pos[pos] < origin[pos] ) {
+			this.pos[pos] += speed;
+		} else if ( this.pos[pos] > origin[pos] ) {
+			this.pos[pos] -= speed;
+		}
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Bug;

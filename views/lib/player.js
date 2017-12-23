@@ -1,7 +1,7 @@
 import MovingObject from './moving_object';
 
 export default class Player extends MovingObject {
-	constructor(width, height, ctx, origin, thrusters, turns) {
+	constructor(width, height, ctx, origin, thrusters) {
 		super(width, height, ctx);
 		this.origin = origin;
 
@@ -20,8 +20,9 @@ export default class Player extends MovingObject {
 
 			switch (keypress) {
 				case 'w':
+					let hostile = true
 					this.thrust(true, false);
-					// this.thrusters();
+					this.thrusters(this.origin, hostile);
 					break;
 				case 's':
 					this.thrust(false, true);

@@ -24,19 +24,14 @@ export default class MovingObject {
 		this.width = width;
 		this.height = height;
 		this.ctx = ctx;
-
-		this.x;
-		this.y;
-		this.radius;
-		this.shade;
 	}
 
-	backdrop() {
-		this.ctx.beginPath();
-		this.ctx.strokeStyle = 'black';
-		this.ctx.lineWidth = 170;
-		this.ctx.arc( this.x, this.y, 25, 0, Math.PI * 2 );
-		this.ctx.stroke();
-		this.ctx.closePath();
+	backdrop(origin, ctx) {
+		ctx.beginPath();
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 170;
+		ctx.arc( origin[0], origin[1], 25, 0, Math.PI * 2 );
+		ctx.stroke();
+		ctx.closePath();
 	}
 }
