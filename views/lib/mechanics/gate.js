@@ -10,7 +10,7 @@ export default class Gate extends MovingObject {
 		this.shade = 'blue';
 	}
 
-	show() {
+	update() {
 		this.ctx.beginPath();
 		this.ctx.fillStyle = this.shade;
 		this.ctx.rect( this.x, this.y, 25, 25 );

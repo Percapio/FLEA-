@@ -194,14 +194,22 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 		this.head = this.drawSide(0);
 	}
 
-	move(thrusters, banking) {
-		window.onkeydown = (e) => {
+	move(thrusters) {
+		let down = true;
+
+		document.onkeydown = (event) => {
+			if (event.repeat != undefined) {
+				down = !event.repeat;
+			}
+
+			if (!down) return;
 			let keypress = event.key;
 
 			switch (keypress) {
 				case 'w':
 					this.thrust(true, false);
 					this.thrusters(this.origin, this.radius);
+					console.log(this.vel);
 					break;
 				case 's':
 					this.thrust(false, true);
@@ -216,6 +224,8 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 					return;
 			}
 		}
+
+		document.onkeyup = (event) => { down = true };
 	}
 
 	update() {
@@ -252,30 +262,30 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 	}
 
 	thrust(pwr = false, breaks = false) {
-		if (pwr && this.vel[0] < 1 && this.vel[1] < 1) {
+		if (pwr && this.vel[0] < 1.2 && this.vel[1] < 1.2) {
 			this.boost(0);
 			this.boost(1);
 		}
 
-		if (breaks && this.vel[0] > this.CONST[1] && this.vel[1] > this.CONST[1]) {
+		if (breaks && this.vel[0] > 0 && this.vel[1] > 0) {
 			this.breaking(0);
 			this.breaking(0);
 		}
 	}
 
 	boost(pos) {
-		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] += this.CONST[1]; 
+		if (this.origin[pos] <= this.head[pos]) {
+			this.vel[pos] += this.CONST[0]; 
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+			this.vel[pos] -= this.CONST[0];
 		}
 	}
 
 	breaking(pos) {
-		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+		if (this.origin[pos] <= this.head[pos]) {
+			this.vel[pos] -= this.CONST[2];
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+			this.vel[pos] += this.CONST[2];
 		}
 	}
 
@@ -312,13 +322,13 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__star__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bug__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__hazard__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timer__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gate__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__fog__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mechanics_player__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mechanics_star__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mechanics_util__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mechanics_game_view__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mechanics_bug__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mechanics_hazard__ = __webpack_require__(8);
+
 
 
 
@@ -339,7 +349,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const canvasPlayer = document.getElementById('player');
 	const ctxPlayer = canvasPlayer.getContext('2d');
 
-	let gate, fog, timer;
+	let view, util;
 	const canvasUI = document.getElementById('ui');
 	const ctxUI = canvasUI.getContext('2d');
 
@@ -348,42 +358,29 @@ window.addEventListener('DOMContentLoaded', () => {
 	const hazards = [];
 	let hostile = false;
 
-	// Initial setup of player, stars, computer, and board
+	// Initial setup of player, stars, and computer
 	function setup() {
-		timer = new __WEBPACK_IMPORTED_MODULE_4__timer__["a" /* default */]( WIDTH, 50, ctxUI );
-		gate = new __WEBPACK_IMPORTED_MODULE_5__gate__["a" /* default */]( WIDTH, HEIGHT, ctx );
-
-		fog = new __WEBPACK_IMPORTED_MODULE_6__fog__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer );
-		player = new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer, origin,
+		player = new __WEBPACK_IMPORTED_MODULE_0__mechanics_player__["a" /* default */]( WIDTH, HEIGHT, ctxPlayer, origin,
 			() => thrusters(origin) );
-		
+		util = new __WEBPACK_IMPORTED_MODULE_2__mechanics_util__["a" /* default */]();
 
-		for (let i=0; i < 350; i++) {
-			stars[i] = new __WEBPACK_IMPORTED_MODULE_0__star__["a" /* default */]( WIDTH, HEIGHT, ctx );
-
-			if (i < 21) {
-				bugs[i] = new __WEBPACK_IMPORTED_MODULE_2__bug__["a" /* default */]( WIDTH, HEIGHT, ctx );
-
-				if (i < 11) {
-					hazards[i] = new __WEBPACK_IMPORTED_MODULE_3__hazard__["a" /* default */]( WIDTH, HEIGHT, ctx );
-				};
-			};
-		};
+		util.grabData( () => makeBoard() );
 	}
 
-	// Background & Backdrop
-	function background() {
-		ctx.beginPath();
-		ctx.fillStyle = 'black';
-		ctx.rect(0, 0, WIDTH, HEIGHT);
-		ctx.fill();
-		ctx.closePath();
-		
-		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx);
-		}
+	function makeBoard() {
+		for (let i=0; i < 350; i++) {
+			stars[i] = new __WEBPACK_IMPORTED_MODULE_1__mechanics_star__["a" /* default */]( WIDTH, HEIGHT, ctx );
 
-		gate.show(origin);
+			if (i < util.data.length) {
+				if ( util.data[i].websites.length === 1 ) {
+					bugs[i] = new __WEBPACK_IMPORTED_MODULE_4__mechanics_bug__["a" /* default */]( WIDTH, HEIGHT, ctx, util.data[i].name );
+				} else {
+					hazards[i] = new __WEBPACK_IMPORTED_MODULE_5__mechanics_hazard__["a" /* default */]( WIDTH, HEIGHT, ctx, util.data[i] );
+				}
+			};
+		};
+
+		view = new __WEBPACK_IMPORTED_MODULE_3__mechanics_game_view__["a" /* default */]( WIDTH, HEIGHT, ctx, ctxUI, stars );
 	}
 
 	// Rendering function
@@ -391,29 +388,26 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
-			background();
+			view.render();
 			moveObjects();
-			timer.draw();
 			player.move();
 			player.update();
-		}, 20);
+		}, 40);
 	}
 
 	function moveObjects() {
-		for (let i=0; i < bugs.length; i++) {
-			bugs[i].move(origin, hostile,
-				() => endGame());
-			bugs[i].show(ctx);
-
-			if (i < hazards.length) {
-				hazards[i].move(origin, 
+		for (let i=0; i < util.data.length; i++) {
+			if ( util.data[i].websites.length === 1 ) {
+				bugs[i].move(origin, hostile,
 					() => endGame());
-				hazards[i].show(ctx);
+				bugs[i].show(ctx);
+			} else {
+				hazards[i].move(origin, () => endGame());
+				hazards[i].show();
 			}
 		}
 
 		hostile = false;
-		fog.render(origin);
 	}
 
 	// Handle enemies
@@ -465,7 +459,112 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 ;
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_json__ = __webpack_require__(6);
+
+
+class Util {
+	constructor() {
+		this.data;
+	}
+
+	counter() {
+		return this.data.length;
+	}
+
+	grabData( makeBoard ) {
+		Object(__WEBPACK_IMPORTED_MODULE_0__data_json__["a" /* getData */])().then( data => {
+			this.data = this.handleData(data);
+			makeBoard();
+		});
+	}
+
+	handleData(data) {
+		let bigData, smallData;
+		[ bigData, smallData ] = this.cherryPick(data);
+		
+		smallData = this.shuffleData(smallData);
+		bigData = this.shuffleData(bigData);
+		let newData = bigData.slice(0, bigData.length / 2)
+										.concat(smallData.slice(0, smallData.length / 6));
+
+		return this.shuffleData(newData);
+	}
+
+	shuffleData(data) {
+		let currentIdx = data.length;
+		let tempEl, randomIdx;
+
+		while ( 0 !== currentIdx ) {
+			randomIdx = Math.floor(Math.random() * currentIdx);
+			currentIdx -= 1;
+
+			tempEl = data[currentIdx];
+			data[currentIdx] = data[randomIdx];
+			data[randomIdx] = tempEl;
+		}
+
+		return data;
+	}
+
+	cherryPick(data) {
+		const bigData = [];
+		const smallData = [];
+
+		data.forEach( el => {
+			if ( el.websites.length > 1) {
+				bigData.push( el );
+			} else {
+				smallData.push( el );
+			}
+		});
+
+		return [ bigData, smallData ];
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Util;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getData;
+
+function getData() {
+	return new Promise( (resolve, reject) => {
+		const request = new XMLHttpRequest();
+
+		request.open('GET', 'https://rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json');
+		request.onload = () => {
+			const data = JSON.parse( request.responseText ).values;
+			const actors = [];
+
+			for (let i=0; i < data.length; i++) {
+				const websites = data[i].meta.refs;
+
+				if (typeof websites != 'undefined') {
+					let actorObject = { 
+						[ 'name' ]: data[i].value,
+						[ 'websites' ]: websites
+					};
+					actors.push( actorObject );
+				}
+			}
+
+			resolve(actors);
+		};
+		request.send();
+	})
+};
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -473,7 +572,7 @@ class Star extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 
 
 class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-	constructor(width, height, ctx) {
+	constructor(width, height, ctx, name) {
 		super(width, height, ctx);
 
 		this.pos = [ Math.random() * ( this.width - 50 ) + 40, 
@@ -481,6 +580,7 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 
 		this.radius = 5;
 		this.shade = 'red';
+		this.name = name;
 
 		for (let i=0; i < 3; i++) {
 			this.checkLocation(this.radius);
@@ -493,6 +593,10 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 		this.ctx.arc( this.pos[0], this.pos[1], this.radius, 0, Math.PI * 2 );
 		this.ctx.fill();
 		this.ctx.closePath();
+
+		this.ctx.font = '9px Arial';
+		this.ctx.fillStyle = 'white';
+		this.ctx.fillText( this.name, this.pos[0] - 10, this.pos[1] );
 	}
 
 	move(origin, hostile = false, endGame) {
@@ -500,14 +604,13 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 		let rangeY = Math.abs(this.pos[1] - origin[1]);
 
 		if (rangeX < 150 && rangeY < 150) {
-			this.guideBug(0, origin, this.CONST[1]);
-			this.guideBug(1, origin, this.CONST[1]);
-		}
+			this.guideBug(0, origin, this.CONST[0]);
+			this.guideBug(1, origin, this.CONST[0]);
 
-		if (hostile) {
-			this.guideBug(0, origin, this.CONST[2]);
-			this.guideBug(1, origin, this.CONST[2]);
-			this.show();
+			if (hostile) {
+				this.guideBug(0, origin, this.CONST[1]);
+				this.guideBug(1, origin, this.CONST[1]);
+			}
 		}
 
 		this.collisionCheck(origin) ? endGame() : null;
@@ -525,7 +628,7 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -533,12 +636,12 @@ class Bug extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */
 
 
 class Hazard extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-	constructor(width, height, ctx) {
+	constructor(width, height, ctx, data) {
 		super(width, height, ctx);
 
 		this.type = this.TYPE[Math.floor(Math.random() * 2)];
 
-		this.radius = Math.random() * (50 - 20) + 20;
+		this.radius = Math.random() * data.websites.length;
 		this.shade = this.COLORS[Math.floor(Math.random() * 5)];
 
 		this.pos = [ Math.random() * ( this.width - 50 ) + 20, 
@@ -563,31 +666,32 @@ class Hazard extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 	}
 
 	move(otherPos, endGame) {
-		if(this.type === 'moving') {
-			this.pos[0] += this.vel[0];
-			this.pos[1] += this.vel[1];
+		// if(this.type === 'moving') {
+		// 	this.pos[0] += this.vel[0];
+		// 	this.pos[1] += this.vel[1];
 
-			if (this.pos[0] < -this.radius) {
-				this.pos[0] = this.width + this.radius;
-			} else if (this.pos[0] > this.width + 50) {
-				this.pos[0] = -this.radius;
-			}
+		// 	if (this.pos[0] < -this.radius) {
+		// 		this.pos[0] = this.width + this.radius;
+		// 	} else if (this.pos[0] > this.width + 50) {
+		// 		this.pos[0] = -this.radius;
+		// 	}
 
-			if (this.pos[1] < -this.radius) {
-				this.pos[1] = this.height + this.radius;
-			} else if (this.pos[1] > this.height + this.radius) {
-				this.pos[1] = -this.radius;
-			}
+		// 	if (this.pos[1] < -this.radius) {
+		// 		this.pos[1] = this.height + this.radius;
+		// 	} else if (this.pos[1] > this.height + this.radius) {
+		// 		this.pos[1] = -this.radius;
+		// 	}
 
-			this.collisionCheck(otherPos) ? endGame() : null;
-		}
+		// }
+
+		this.collisionCheck(otherPos) ? endGame() : null;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Hazard;
 
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -635,7 +739,7 @@ class Timer {
 		return (num < 10) ? '0' + num : num;
 	}
 
-	draw() {
+	update() {
 		this.ctx.clearRect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
 
 		this.ctx.beginPath();
@@ -653,7 +757,7 @@ class Timer {
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -670,7 +774,7 @@ class Gate extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 		this.shade = 'blue';
 	}
 
-	show() {
+	update() {
 		this.ctx.beginPath();
 		this.ctx.fillStyle = this.shade;
 		this.ctx.rect( this.x, this.y, 25, 25 );
@@ -688,44 +792,44 @@ class Gate extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default *
 
 
 /***/ }),
-/* 8 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__player__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gate__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__timer__ = __webpack_require__(9);
 
 
-class Fog extends __WEBPACK_IMPORTED_MODULE_0__player__["a" /* default */] {
-	constructor( width, height, ctx ){
-		super(width, height, ctx);
 
-		this.shade = 'black';
+class GameView {
+	constructor(width, height, ctx, ctxUI, stars) {
+		this.width = width;
+		this.height = height;
+		this.ctx = ctx;
+		this.stars = stars;
+
+		this.gate = new __WEBPACK_IMPORTED_MODULE_0__gate__["a" /* default */] ( width, height, ctx );
+    this.timer = new __WEBPACK_IMPORTED_MODULE_1__timer__["a" /* default */]( width, 50, ctxUI );
 	}
 
-	render(origin) {
-		this.ctx.restore();
+	// Background & Backdrop
+	render(origin, endGame) {
 		this.ctx.beginPath();
-		this.ctx.fillStyle = this.shade;
+		this.ctx.fillStyle = 'black';
 		this.ctx.rect(0, 0, this.width, this.height);
 		this.ctx.fill();
 		this.ctx.closePath();
+		
+		for (let i=0; i < this.stars.length; i++) {
+			this.stars[i].show(this.ctx);
+		}
 
-
-		this.ctx.save();
-		this.ctx.beginPath();
-		this.ctx.arc( origin[0], origin[1], 100, 0, Math.PI * 2 );
-		this.ctx.clip();
-		this.ctx.closePath();
-
-		this.ctx.clearRect(0, 0, this.width, this.height);
-		this.ctx.restore();
-	}
-
-	drawSide() {
-
+		this.gate.update();
+		this.timer.update();
 	}
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Fog;
+/* harmony export (immutable) */ __webpack_exports__["a"] = GameView;
 
 
 /***/ })

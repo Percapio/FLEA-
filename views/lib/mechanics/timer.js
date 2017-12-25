@@ -42,7 +42,7 @@ export default class Timer {
 		return (num < 10) ? '0' + num : num;
 	}
 
-	draw() {
+	update() {
 		this.ctx.clearRect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
 
 		this.ctx.beginPath();

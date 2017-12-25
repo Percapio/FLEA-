@@ -14,14 +14,22 @@ export default class Player extends MovingObject {
 		this.head = this.drawSide(0);
 	}
 
-	move(thrusters, banking) {
-		window.onkeydown = (e) => {
+	move(thrusters) {
+		let down = true;
+
+		document.onkeydown = (event) => {
+			if (event.repeat != undefined) {
+				down = !event.repeat;
+			}
+
+			if (!down) return;
 			let keypress = event.key;
 
 			switch (keypress) {
 				case 'w':
 					this.thrust(true, false);
 					this.thrusters(this.origin, this.radius);
+					console.log(this.vel);
 					break;
 				case 's':
 					this.thrust(false, true);
@@ -36,6 +44,8 @@ export default class Player extends MovingObject {
 					return;
 			}
 		}
+
+		document.onkeyup = (event) => { down = true };
 	}
 
 	update() {
@@ -72,30 +82,30 @@ export default class Player extends MovingObject {
 	}
 
 	thrust(pwr = false, breaks = false) {
-		if (pwr && this.vel[0] < 1 && this.vel[1] < 1) {
+		if (pwr && this.vel[0] < 1.2 && this.vel[1] < 1.2) {
 			this.boost(0);
 			this.boost(1);
 		}
 
-		if (breaks && this.vel[0] > this.CONST[1] && this.vel[1] > this.CONST[1]) {
+		if (breaks && this.vel[0] > 0 && this.vel[1] > 0) {
 			this.breaking(0);
 			this.breaking(0);
 		}
 	}
 
 	boost(pos) {
-		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] += this.CONST[1]; 
+		if (this.origin[pos] <= this.head[pos]) {
+			this.vel[pos] += this.CONST[0]; 
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+			this.vel[pos] -= this.CONST[0];
 		}
 	}
 
 	breaking(pos) {
-		if (this.origin[pos] < this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+		if (this.origin[pos] <= this.head[pos]) {
+			this.vel[pos] -= this.CONST[2];
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[1];
+			this.vel[pos] += this.CONST[2];
 		}
 	}
 

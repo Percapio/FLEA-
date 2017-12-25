@@ -25,10 +25,16 @@
   "homepage": "https://github.com/Percapio/Gate-is-Down#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
+    "grunt-cli": "^1.2.0",
+    "jquery": "^3.2.1",
+    "jquery-migrate": "^3.0.1",
+    "jsdom": "^3.1.2",
     "morgan": "^1.9.0",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
+    "request": "^2.83.0",
     "sequelize": "^4.28.6",
     "webpack": "^3.10.0"
   },

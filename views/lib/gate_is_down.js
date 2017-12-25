@@ -1,10 +1,11 @@
-import Star from './star';
-import Player from './player';
-import Bug from './bug';
-import Hazard from './hazard';
-import Timer from './timer';
-import Gate from './gate';
-import Fog from './fog';
+import Player from './mechanics/player';
+
+import Star from './mechanics/star';
+import Util from './mechanics/util';
+import GameView from './mechanics/game_view';
+
+import Bug from './mechanics/bug';
+import Hazard from './mechanics/hazard';
 
 window.addEventListener('DOMContentLoaded', () => {
 	const WIDTH = 1200;
@@ -18,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const canvasPlayer = document.getElementById('player');
 	const ctxPlayer = canvasPlayer.getContext('2d');
 
-	let gate, fog, timer;
+	let view, util;
 	const canvasUI = document.getElementById('ui');
 	const ctxUI = canvasUI.getContext('2d');
 
@@ -27,42 +28,29 @@ window.addEventListener('DOMContentLoaded', () => {
 	const hazards = [];
 	let hostile = false;
 
-	// Initial setup of player, stars, computer, and board
+	// Initial setup of player, stars, and computer
 	function setup() {
-		timer = new Timer( WIDTH, 50, ctxUI );
-		gate = new Gate( WIDTH, HEIGHT, ctx );
-
-		fog = new Fog( WIDTH, HEIGHT, ctxPlayer );
 		player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
 			() => thrusters(origin) );
-		
+		util = new Util();
 
+		util.grabData( () => makeBoard() );
+	}
+
+	function makeBoard() {
 		for (let i=0; i < 350; i++) {
 			stars[i] = new Star( WIDTH, HEIGHT, ctx );
 
-			if (i < 21) {
-				bugs[i] = new Bug( WIDTH, HEIGHT, ctx );
-
-				if (i < 11) {
-					hazards[i] = new Hazard( WIDTH, HEIGHT, ctx );
-				};
+			if (i < util.data.length) {
+				if ( util.data[i].websites.length === 1 ) {
+					bugs[i] = new Bug( WIDTH, HEIGHT, ctx, util.data[i].name );
+				} else {
+					hazards[i] = new Hazard( WIDTH, HEIGHT, ctx, util.data[i] );
+				}
 			};
 		};
-	}
 
-	// Background & Backdrop
-	function background() {
-		ctx.beginPath();
-		ctx.fillStyle = 'black';
-		ctx.rect(0, 0, WIDTH, HEIGHT);
-		ctx.fill();
-		ctx.closePath();
-		
-		for (let i=0; i < stars.length; i++) {
-			stars[i].show(ctx);
-		}
-
-		gate.show(origin);
+		view = new GameView( WIDTH, HEIGHT, ctx, ctxUI, stars );
 	}
 
 	// Rendering function
@@ -70,29 +58,26 @@ window.addEventListener('DOMContentLoaded', () => {
 		setup();
 
 		setInterval( () => {
-			background();
+			view.render();
 			moveObjects();
-			timer.draw();
 			player.move();
 			player.update();
-		}, 20);
+		}, 40);
 	}
 
 	function moveObjects() {
-		for (let i=0; i < bugs.length; i++) {
-			bugs[i].move(origin, hostile,
-				() => endGame());
-			bugs[i].show(ctx);
-
-			if (i < hazards.length) {
-				hazards[i].move(origin, 
+		for (let i=0; i < util.data.length; i++) {
+			if ( util.data[i].websites.length === 1 ) {
+				bugs[i].move(origin, hostile,
 					() => endGame());
-				hazards[i].show(ctx);
+				bugs[i].show(ctx);
+			} else {
+				hazards[i].move(origin, () => endGame());
+				hazards[i].show();
 			}
 		}
 
 		hostile = false;
-		fog.render(origin);
 	}
 
 	// Handle enemies
