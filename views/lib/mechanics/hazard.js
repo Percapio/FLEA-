@@ -9,8 +9,7 @@ export default class Hazard extends MovingObject {
 		this.radius = Math.random() * data.websites.length;
 		this.shade = this.COLORS[Math.floor(Math.random() * 5)];
 
-		this.pos = [ Math.random() * ( this.width - 50 ) + 20, 
-								Math.random() * ( this.height - 50 ) + 20 ];
+		this.pos = this.randomStart();
 
 		for (let i=0; i < 3; i++) {
 			this.checkLocation(this.radius);

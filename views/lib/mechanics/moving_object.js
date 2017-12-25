@@ -1,24 +1,20 @@
 export default class MovingObject {
 	constructor(width, height, ctx) {
 		this.COLORS = [
-			'#F0E68C',
-			'#40E0D0',
-			'#BDB76B',
-			'#3CB371',
-			'#F4A460',
-			'white',
-			'white',
-			'white',
-			'white',
-			'white',
-			'white',
-			'white',
-			'white',
-			'white',			
-			'white',
-			'white',
-			'white',
-			'white'
+			"#CB3301", 
+			"#FF0066", 
+			"#FF6666", 
+			"#FEFF99", 
+			"#FFFF67", 
+			"#CCFF66", //yellow-green
+			"#99FE00", //neon-green
+			"#EC8EED", //
+			"#FF99CB", //pig-pink
+			"#FE349A", //magenta
+			"#CC99FE", //purple-hue
+			"#6599FF", //light-blue
+			"#03CDFF", //sky-blue
+			"#FFFFFF"  //white
 		];
 
 		this.CONST = [
@@ -97,5 +93,10 @@ export default class MovingObject {
 			this.pos = [ Math.random() * ( this.width - 50 ) + 20 + radius, 
 								Math.random() * ( this.height - 50 ) + 20 + radius ];
 		}
+	}
+
+	randomStart() {
+		return [ Math.random() * ( this.width - 200 ) + 150, 
+								Math.random() * ( this.height - 200 ) + 150 ]
 	}
 }

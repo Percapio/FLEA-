@@ -4,8 +4,7 @@ export default class Bug extends MovingObject {
 	constructor(width, height, ctx, name) {
 		super(width, height, ctx);
 
-		this.pos = [ Math.random() * ( this.width - 50 ) + 40, 
-								Math.random() * ( this.height - 50 ) + 40 ];
+		this.pos = this.randomStart();
 
 		this.radius = 5;
 		this.shade = 'red';

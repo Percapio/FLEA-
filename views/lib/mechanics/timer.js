@@ -45,12 +45,6 @@ export default class Timer {
 	update() {
 		this.ctx.clearRect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
 
-		this.ctx.beginPath();
-		this.ctx.fillStyle = 'ivory';
-		this.ctx.rect( (this.width / 2 ) - 75, (this.height - 25), 120, 50 );
-		this.ctx.fill();
-		this.ctx.closePath();
-
 		this.ctx.font = '20px Georgia';
 		this.ctx.fillStyle = 'red';
 		this.ctx.fillText( this.countdown(), (this.width / 2 ) - 66, (this.height - 8 ) );

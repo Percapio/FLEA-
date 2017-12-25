@@ -87,7 +87,7 @@ export default class Player extends MovingObject {
 			this.boost(1);
 		}
 
-		if (breaks && this.vel[0] > 0 && this.vel[1] > 0) {
+		if (breaks && this.vel[0] > -1.2 && this.vel[1] > -1.2) {
 			this.breaking(0);
 			this.breaking(0);
 		}
@@ -103,9 +103,9 @@ export default class Player extends MovingObject {
 
 	breaking(pos) {
 		if (this.origin[pos] <= this.head[pos]) {
-			this.vel[pos] -= this.CONST[2];
+			this.vel[pos] -= this.CONST[0];
 		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] += this.CONST[2];
+			this.vel[pos] -= this.CONST[0];
 		}
 	}
 
