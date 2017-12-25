@@ -52,40 +52,52 @@ export default class MovingObject {
 		return ((distX < this.radius) && (distY < this.radius));
 	}
 
-	outsideBorder(pos, radius) {
-		if (pos[0] - radius <= 0) {
+	outsideBorder() {
+		// Left & Right walls
+		if (this.pos[0] - this.radius <= 1) {
 			return true;
-		} else if (pos[0] + radius >= this.width) {
+		} else if (this.pos[0] + this.radius >= this.width - 1) {
 			return true;
 		}
 
-		if (pos[1] - radius <= 0) {
+		// Top & Bottom walls
+		if (this.pos[1] - this.radius <= 1) {
 			return true;
-		} else if (pos[1] + radius >= this.height) {
+		} else if (this.pos[1] + this.radius >= this.height - 1) {
 			return true;
 		}
 
 		return false;
 	}
 
-	bounceWidth(pos, radius) {
-		if (pos - radius <= 0) {
-			pos = pos + this.CONST[0];
-		} else if (pos + radius >= this.width) {
-			pos = pos - this.CONST[0];
+	wallBounce() {
+		// Wall based bouncing
+		let speed = this.CONST[2];
+		console.log(this.vel);
+
+		// Top Wall
+		if (this.pos[1] + this.radius < 20) {
+			// this.vel[0] += speed;
+			this.vel[1] *= -1;
+		} 
+
+		// Left Wall
+		else if (this.pos[0] + this.radius < 20) {
+			this.vel[0] *= -1;
+			// this.vel[1] += speed;
 		}
 
-		return pos;
-	}
-
-	bounceHeight(pos, radius) {
-		if (pos - radius <= 0) {
-			pos = pos + this.CONST[0];
-		} else if (pos + radius >= this.height) {
-			pos = pos - this.CONST[0];
+		// Bottom Wall
+		else if (Math.abs(this.pos[1] + this.radius - this.height) < 20) {
+			// this.vel[0] -= speed;
+			this.vel[1] *= -1;
 		}
 
-		return pos;
+		// Right Wall
+		else if (Math.abs(this.pos[0] + this.radius - this.width) < 20) {
+			this.vel[0] *= -1;
+			// this.vel[1] -= speed;
+		}
 	}
 
 	checkLocation(radius) {

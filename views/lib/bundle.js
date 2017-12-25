@@ -122,40 +122,52 @@ class MovingObject {
 		return ((distX < this.radius) && (distY < this.radius));
 	}
 
-	outsideBorder(pos, radius) {
-		if (pos[0] - radius <= 0) {
+	outsideBorder() {
+		// Left & Right walls
+		if (this.pos[0] - this.radius <= 1) {
 			return true;
-		} else if (pos[0] + radius >= this.width) {
+		} else if (this.pos[0] + this.radius >= this.width - 1) {
 			return true;
 		}
 
-		if (pos[1] - radius <= 0) {
+		// Top & Bottom walls
+		if (this.pos[1] - this.radius <= 1) {
 			return true;
-		} else if (pos[1] + radius >= this.height) {
+		} else if (this.pos[1] + this.radius >= this.height - 1) {
 			return true;
 		}
 
 		return false;
 	}
 
-	bounceWidth(pos, radius) {
-		if (pos - radius <= 0) {
-			pos = pos + this.CONST[0];
-		} else if (pos + radius >= this.width) {
-			pos = pos - this.CONST[0];
+	wallBounce() {
+		// Wall based bouncing
+		let speed = this.CONST[2];
+		console.log(this.vel);
+
+		// Top Wall
+		if (this.pos[1] + this.radius < 20) {
+			// this.vel[0] += speed;
+			this.vel[1] *= -1;
+		} 
+
+		// Left Wall
+		else if (this.pos[0] + this.radius < 20) {
+			this.vel[0] *= -1;
+			// this.vel[1] += speed;
 		}
 
-		return pos;
-	}
-
-	bounceHeight(pos, radius) {
-		if (pos - radius <= 0) {
-			pos = pos + this.CONST[0];
-		} else if (pos + radius >= this.height) {
-			pos = pos - this.CONST[0];
+		// Bottom Wall
+		else if (Math.abs(this.pos[1] + this.radius - this.height) < 20) {
+			// this.vel[0] -= speed;
+			this.vel[1] *= -1;
 		}
 
-		return pos;
+		// Right Wall
+		else if (Math.abs(this.pos[0] + this.radius - this.width) < 20) {
+			this.vel[0] *= -1;
+			// this.vel[1] -= speed;
+		}
 	}
 
 	checkLocation(radius) {
@@ -296,7 +308,7 @@ window.addEventListener('DOMContentLoaded', () => {
 class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
 	constructor(width, height, ctx, origin, thrusters) {
 		super(width, height, ctx);
-		this.origin = origin;
+		this.pos = origin;
 
 		this.radius = 5;
 		this.rotation = 0;
@@ -321,16 +333,28 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 			switch (keypress) {
 				case 'w':
 					this.thrust(true, false);
-					this.thrusters(this.origin, this.radius);
-					console.log(this.vel);
+					this.thrusters(this.pos, this.radius);
+					break;
+				case 'ArrowUp':
+					this.thrust(true, false);
+					this.thrusters(this.pos, this.radius);
 					break;
 				case 's':
+					this.thrust(false, true);
+					break;				
+				case 'ArrowDown':
 					this.thrust(false, true);
 					break;
 				case 'a':
 					this.turn(true, false);
+					break;				
+				case 'ArrowLeft':
+					this.turn(true, false);
 					break;
 				case 'd':
+					this.turn(false, true);
+					break;				
+				case 'ArrowRight':
 					this.turn(false, true);
 					break;
 				default:
@@ -347,7 +371,7 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 	}
 
 	render() {
-		this.ctx.clearRect(this.origin[0] - 100, this.origin[1] - 100, this.origin[0] + 100, this.origin[1] + 100);
+		this.ctx.clearRect(this.pos[0] - 100, this.pos[1] - 100, this.pos[0] + 100, this.pos[1] + 100);
 
 		this.ctx.beginPath();
 		this.ctx.fillStyle = 'white';
@@ -369,46 +393,59 @@ class Player extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 	drawSide(i) {
 		let sides = Math.PI * 2 / 3;
-		let results = [ this.origin[0] + this.radius * Math.cos( sides * i + this.rotation ),
-										this.origin[1] + this.radius * Math.sin( sides * i + this.rotation ) ];
+		let results = [ this.pos[0] + this.radius * Math.cos( sides * i + this.rotation ),
+										this.pos[1] + this.radius * Math.sin( sides * i + this.rotation ) ];
 		return results;
 	}
 
 	thrust(pwr = false, breaks = false) {
-		if (pwr && this.vel[0] < 1.2 && this.vel[1] < 1.2) {
-			this.boost(0);
-			this.boost(1);
+		if (pwr && this.vel[0] < 3.2 && this.vel[1] < 3.2) {
+			this.boost(pwr);
 		}
 
-		if (breaks && this.vel[0] > -1.2 && this.vel[1] > -1.2) {
-			this.breaking(0);
-			this.breaking(0);
+		if (breaks && this.vel[0] > -3.2 && this.vel[1] > -3.2) {
+			this.boost(pwr)
 		}
 	}
 
-	boost(pos) {
-		if (this.origin[pos] <= this.head[pos]) {
-			this.vel[pos] += this.CONST[0]; 
-		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[0];
-		}
-	}
+	boost(thrust) {
+		// Inverse quadrant based boosts
+		let speed = this.CONST[0];
+		let direction = thrust ? 1 : -1;
 
-	breaking(pos) {
-		if (this.origin[pos] <= this.head[pos]) {
-			this.vel[pos] -= this.CONST[0];
-		} else if (this.origin[pos] > this.head[pos]) {
-			this.vel[pos] -= this.CONST[0];
+		// Quadrant I
+		if (this.pos[0] <= this.head[0] && this.pos[1] <= this.head[1]) {
+			this.vel[0] += speed * direction;
+			this.vel[1] += speed * direction;
+		} 
+
+		// Quadrant II
+		else if (this.pos[0] > this.head[0] && this.pos[1] <= this.head[1]) {
+			this.vel[0] -= speed * direction;
+			this.vel[1] += speed * direction;
+		}
+
+		// Quadrant III
+		else if (this.pos[0] > this.head[0] && this.pos[1] > this.head[1]) {
+			this.vel[0] -= speed * direction;
+			this.vel[1] -= speed * direction;
+		}
+
+		// Quadrant IV
+		else if (this.pos[0] <= this.head[0] && this.pos[1] > this.head[1]) {
+			this.vel[0] += speed * direction;
+			this.vel[1] -= speed * direction;
 		}
 	}
 
 	momentum() {
-		if (this.outsideBorder(this.origin, this.radius)) {
-			this.origin[0] = this.bounceWidth(this.origin[0], this.radius);
-			this.origin[1] = this.bounceHeight(this.origin[1], this.radius);
+		if (this.outsideBorder()) {
+			this.wallBounce();
+			this.pos[0] += this.vel[0];
+			this.pos[1] += this.vel[1];
 		} else {
-			this.origin[0] += this.vel[0];
-			this.origin[1] += this.vel[1];			
+			this.pos[0] += this.vel[0];
+			this.pos[1] += this.vel[1];
 		}
 	}
 
