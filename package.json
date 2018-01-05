@@ -1,0 +1,40 @@
+{
+  "name": "gate_is_down",
+  "version": "1.0.0",
+  "description": "Javascript Web Browser Video Game",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Percapio/FSP.git"
+  },
+  "keywords": [
+    "javascript",
+    "game",
+    "asteroid",
+    "web",
+    "scraping",
+    "data",
+    "survival"
+  ],
+  "author": "Thomas Vu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Percapio/FSP/issues"
+  },
+  "homepage": "https://github.com/Percapio/FSP#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.28.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.7"
+  }
+}
