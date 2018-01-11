@@ -10,6 +10,10 @@
 
 <body>
 	
+	<div class='side-container'>
+		<div class='scoreboard'></div>
+		<div class='contact-list'></div>
+	</div>
 	<div id= 'container'>
 		<h1>Gate is Down</h1>
 		<div class= 'ui'>
@@ -20,7 +24,31 @@
 			style= 'z-index: 1; position: absolute;'></canvas>
 			<canvas id= 'gateIsDown' width= '1200' height= '400' 
 			style= 'z-index: 0; position: absolute;'></canvas>
+
+			<div class='modal-container' id='modal'>
+				<div class='modal-content pause'>
+					<span class="close">&times;</span>
+					<p>Spacebar to start</p>
+				</div>
+				<div class='modal-content lose'>
+					<span class="close">&times;</span>
+					<p>You Lose.</p>
+					<form>
+						<input type='text' placeholder="AAA"/>
+						<input type='submit' placeholder="Submit"/>
+					</form>
+				</div>
+				<div class='modal-content win'>
+					<span class="close">&times;</span>
+					<p>You Win!</p>
+					<form>
+						<input type='text' placeholder="AAA" />
+						<input type='submit' placeholder="Submit" />
+					</form>
+				</div>
+			</div>
 		</div>
+		<button id='open'>Open</button>
 	</div>
 	
 	<script type="application/javascript" src='../server/www.js'></script>

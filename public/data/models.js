@@ -1,5 +1,5 @@
 // import { fetchData } from './controllers';
-const checkAndReturn = require('./controllers').checkAndReturn;
+// const checkAndReturn = require('./controllers').checkAndReturn;
 
 // console.log('hi');
 // checkAndReturn();

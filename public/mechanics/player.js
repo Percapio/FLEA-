@@ -1,7 +1,7 @@
 import MovingObject from './moving_object';
 
 export default class Player extends MovingObject {
-	constructor(width, height, ctx, origin, thrusters) {
+	constructor(width, height, ctx, origin, thrusters, pause) {
 		super(width, height, ctx);
 		this.pos = origin;
 		this.image = new Image();
@@ -11,6 +11,7 @@ export default class Player extends MovingObject {
 
 		this.vel = [ 0, 0 ];
 		this.thrusters = thrusters;
+		this.pause = pause;
 
 		this.head = [ 0, 0 ];
 		this.angle = 0;
@@ -56,8 +57,8 @@ export default class Player extends MovingObject {
 				case 'ArrowRight':
 					this.turn(false, true);
 					break;
-				default:
-					return;
+				case 'Space':
+					this.space('player');
 			}
 		}
 

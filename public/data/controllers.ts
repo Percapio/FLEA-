@@ -5,14 +5,7 @@ const fb     = require('firebase'),
       fetch  = require('fetch').fetchUrl;
 
 //*** Config Firebase */
-const config = {
-  apiKey: "AIzaSyAEHSPRcDAzru_95S8TAqMLLRYkU-pkZMM",
-  authDomain: "gate-is-down.firebaseapp.com",
-  databaseURL: "https://gate-is-down.firebaseio.com",
-  projectId: "gate-is-down",
-  storageBucket: "",
-  messagingSenderId : "923810443103"
-};
+/* temporarily removed */
 
 //*** Initialize Firebase */
 const firebase = fb.initializeApp(config),
@@ -30,7 +23,19 @@ module.exports = {
         music.play();
       })
       .catch(error => console.log(error));
-  }
+  },
+
+  inputInitials() {
+    console.log('BBB')
+  },
+
+  userPosition() {
+    console.log('last place')
+  },
+
+  topThreePlayers() {
+    console.log('{ Dude, Bob, George }')
+  },
 };
 
 const grabData = () => {

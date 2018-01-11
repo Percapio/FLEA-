@@ -7,6 +7,7 @@ import GameView from './mechanics/game_view';
 import Hacker from './mechanics/hacker';
 // import Hazard from './mechanics/hazard';
 import { debug } from 'util';
+import { pauseModal } from './ui/modal';
 
 window.addEventListener('DOMContentLoaded', () => {
 	const WIDTH = 1200;
@@ -29,11 +30,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	const hackers = [];
 	// const hazards = [];
 	let hostile = false;
+	let pause   = true;
 
 	// Initial setup of player, stars, and computer
 	async function setup() {
 		player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
-			() => thrusters(origin) );
+			() => thrusters(origin, () => togglePause()) );
 		util = new Util( music );
 
 		util.grabData( () => makeBoard());
@@ -53,19 +55,30 @@ window.addEventListener('DOMContentLoaded', () => {
 			};
 		};
 
-		view = new GameView( WIDTH, HEIGHT, ctx, ctxUI, stars );
+		view = new GameView( WIDTH, HEIGHT, ctx, ctxUI, stars,
+								() => togglePause() );
+	}
+
+	function togglePause(propPause) {
+		pause = !pause;
+		if (pause) {
+			console.log('stop time');
+		}
+
+		pauseModal(propPause);
 	}
 
 	// Rendering function
 	function play() {
 		setup();
+		toggleGame();
+	}
 
-		setInterval( () => {
-			view.render();
-			moveObjects();
-			player.move();
-			player.update();
-		}, 40);
+	function draw() {
+		view.render();
+		moveObjects();
+		player.move();
+		player.update();
 	}
 
 	function moveObjects() {
@@ -84,6 +97,19 @@ window.addEventListener('DOMContentLoaded', () => {
 		hostile = false;
 	}
 
+	function toggleGame() {
+		// if (pause) {
+		// 	draw()
+		// } else {
+		// 	setInterval(() => {
+		// 			draw()
+		// 	}, 40);
+		// }
+		setInterval(() => {
+			draw()
+		}, 40);
+	}
+
 	// Handle enemies
 	function thrusters(originPlayer = origin) {
 		origin[0] = originPlayer[0];
@@ -94,8 +120,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// End of game
-	function endGame() {
+	function endGame(propPause) {
 		console.log('YOU DIED.');
+		togglePause(propPause);
 	}
 
 	// Start the game

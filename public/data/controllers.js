@@ -20,6 +20,15 @@ module.exports = {
             makeBoard();
             music.play();
         })["catch"](function (error) { return console.log(error); });
+    },
+    inputInitials: function () {
+        console.log('BBB');
+    },
+    userPosition: function () {
+        console.log('last place');
+    },
+    topThreePlayers: function () {
+        console.log('{ Dude, Bob, George }');
     }
 };
 var grabData = function () {
