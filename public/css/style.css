@@ -1,0 +1,100 @@
+/* Reset */
+html, body, header, nav, h1, a,
+ul, li, strong, main, button, i,
+section, img, div, h2, p, form,
+fieldset, label, input, textarea,
+span, article, footer, time, small {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  box-sizing: inherit;
+  background: transparent;
+  display: block;
+  word-wrap: inherit;
+  box-sizing: inherit;
+  font-family: 'Roboto', sans-serif;
+}
+
+ul, li {
+  list-style: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+input[type="password"],
+input[type="email"],
+input[type="text"],
+input[type="submit"],
+textarea {
+  /*
+  Get rid of native styling. Read more here:
+  http://css-tricks.com/almanac/properties/a/appearance/
+  */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+
+
+/* Styling */
+body {
+	background-color: rgba(0, 0, 0, 1);
+}
+
+#container {
+	padding-top: 30px;
+	display: flex;
+	flex-direction: column;
+}
+
+.canvases {
+  margin: 0 auto;
+  position: relative;
+  width: 1200px;
+  height: 400px;
+  border: 1px solid #99FE00;
+}
+
+.ui {
+  margin: 0 auto;
+}
+
+h1 {
+	text-transform: uppercase;
+	font-size: 30px;
+	font-weight: 700;
+  align-self: center;
+  color: #fff;
+
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+
+  font-family: Iceland;
+  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+  -moz-animation: neon1 1.5s ease-in-out infinite alternate;
+  animation: neon1 1.5s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes neon1 {
+  from {
+    text-shadow: 0 0 10px #08C014, 0 0 20px #08C014, 0 0 30px #08C014, 0 0 40px #99FE00, 0 0 70px #99FE00, 0 0 80px #99FE00, 0 0 100px #99FE00, 0 0 150px #99FE00;
+  }
+  to {
+    text-shadow: 0 0 5px #08C014, 0 0 10px #08C014, 0 0 15px #08C014, 0 0 20px #99FE00, 0 0 35px #99FE00, 0 0 40px #99FE00, 0 0 50px #99FE00, 0 0 75px #99FE00;
+  }
+}

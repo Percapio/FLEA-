@@ -1,11 +1,10 @@
 {
   "name": "gate_is_down",
   "version": "1.0.0",
-  "description": "Javascript Web Browser Video Game",
-  "main": "app.js",
+  "description": "Javascript browser game using webscrapping and Firebase database",
+  "main": "./public/gate_is_down.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -13,12 +12,12 @@
   },
   "keywords": [
     "javascript",
+    "browser",
     "game",
-    "asteroid",
-    "web",
-    "scraping",
-    "data",
-    "survival"
+    "webscrapping",
+    "Firebase",
+    "database",
+    "education"
   ],
   "author": "Thomas Vu",
   "license": "ISC",
@@ -27,15 +26,19 @@
   },
   "homepage": "https://github.com/Percapio/FSP#readme",
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "cheerio-req": "^1.2.2",
-    "express": "^4.16.2",
-    "morgan": "^1.9.0",
-    "pg": "^7.4.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^4.28.6"
+    "fetch": "^1.1.0",
+    "firebase": "^4.8.1"
   },
   "devDependencies": {
-    "nodemon": "^1.14.7"
+    "@babel/core": "^7.0.0-beta.37",
+    "@babel/preset-env": "^7.0.0-beta.37",
+    "@babel/preset-typescript": "^7.0.0-beta.37",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.0-beta.0",
+    "ts-loader": "^3.2.0",
+    "typescript": "^2.6.2"
+  },
+  "quokka": {
+    "babel": true
   }
 }

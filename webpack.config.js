@@ -1,15 +1,31 @@
+const path = require('path');
+
 module.exports = {
-  entry: "./lib/gate_is_down.js",
+  entry: './public/gate_is_down.js',
   output: {
-    filename: "./lib/bundle.js"
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js'
   },
-  devtool: 'source-map',
-  // module: {
-  // 	loaders: [
-  // 		{
-  // 			test: /\.json$/,
-  // 			loader: 'json-loader'
-  // 		}
-	// 	]
-	// },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+      }
+    ],
+    rules: [
+      { 
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
+      }
+    ]
+  },
+  devtool: 'inline-source-map',
+  node: {
+    dns: 'mock',
+    net: 'mock',
+  }
 };
