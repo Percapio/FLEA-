@@ -190,6 +190,59 @@ body {
   object-fit: contain;
 }
 
+.side-container, .credits {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+.scoreboard, .credits {
+  padding: 30px;
+  color: white;
+  border: 1px solid white;
+  box-shadow: inset 0px 0px 20px blue, 0px 0px 20px blue;
+}
+
+.credits {
+  flex-direction: column;
+}
+
+.credit-links {
+  color: green;
+}
+
+.credit-links:hover {
+  color: white;
+  text-shadow: 
+    0 0 10px #08C014, 
+    0 0 20px #08C014, 
+    0 0 30px #08C014, 
+    0 0 40px #99FE00, 
+    0 0 70px #99FE00, 
+    0 0 80px #99FE00, 
+    0 0 100px #99FE00, 
+    0 0 150px #99FE00;
+}
+
+.margin-top-me {
+  margin-top: 20px;
+}
+
+.scoreboard th {
+  text-align: left;
+  padding-right: 10px;
+}
+
+.scoreboard td:nth-child(1) {
+  padding-right: 20px;
+}
+
+.scoreboard th:nth-child(2), .scoreboard td:nth-child(2) {
+  padding-left: 30px;
+  border-left: 1px solid white;
+  box-shadow: -5px 0px 88px -1px rgba(0, 136, 255, 0.79);
+}
+
 .canvases {
   margin: 0 auto;
   position: relative;

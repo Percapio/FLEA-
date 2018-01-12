@@ -23,15 +23,63 @@ module.exports = {
             music.play();
         })["catch"](function (error) { return console.log(error); });
     },
-    grabScores: function () {
-        console.log('BBB');
+    grabScores: function (level, renderScoreboard) {
+        var people = db.ref().child(level.toString());
+        people.once('value')
+            .then(function (data) {
+            var topThree = grabTopThree(Object.values(data.val()));
+            var orderedThree = orderTopThree(topThree);
+            renderScoreboard(orderedThree);
+        })["catch"](function (error) { return console.log(error); });
     },
     userPosition: function () {
         console.log('last place');
     },
     makeScore: function (data, level) {
-        db.ref().child(level).set({ person: data });
+        db.ref().child(level).push({ person: data });
     }
+};
+var orderTopThree = function (people) {
+    for (var i = 0; i < 2; i++) {
+        var personA = people[i];
+        for (var j = 1; j < 3; j++) {
+            var personB = people[j];
+            if (personA.time.seconds > personB.time.seconds) {
+                var tradePerson = personA;
+                personA = personB;
+                personB = tradePerson;
+            }
+            else if (personA.time.milliseconds > personB.time.milliseconds && personA.time.seconds === personB.time.seconds) {
+                var tradePerson = personA;
+                personA = personB;
+                personB = tradePerson;
+            }
+            people[i] = personA;
+            people[j] = personB;
+        }
+    }
+    return people;
+};
+var grabTopThree = function (people) {
+    var results = [];
+    for (var j = 0; j < people.length; j++) {
+        var person = people[j].person;
+        if (results.length < 3) {
+            results.push(person);
+        }
+        else {
+            var seconds = person.time.seconds, milliseconds = person.time.milliseconds;
+            for (var i = 0; i < 3; i++) {
+                if (seconds < results[i].person.time.seconds) {
+                    results = results.splice(i, 1, person);
+                }
+                else if (milliseconds < results[i].person.time.seconds && seconds === results[i].person.time.seconds) {
+                    results = results.splice(i, 1, person);
+                }
+            }
+        }
+    }
+    return results;
 };
 var grabData = function () {
     fetch('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json', function (error, meta, body) {

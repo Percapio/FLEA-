@@ -34,8 +34,16 @@ module.exports = {
       .catch(error => console.log(error));
   },
 
-  grabScores() {
-    console.log('BBB')
+  grabScores(level: number, renderScoreboard) {
+    const people : Array<any> = db.ref().child(level.toString());
+
+    people.once('value')
+      .then( data => {
+        let topThree = grabTopThree(Object.values(data.val()));
+        let orderedThree = orderTopThree(topThree);
+        renderScoreboard(orderedThree);
+      })
+      .catch( error => console.log(error));
   },
 
   userPosition() {
@@ -43,9 +51,78 @@ module.exports = {
   },
 
   makeScore(data: any, level: number) {
-    db.ref().child(level).set({ person: data });
+    db.ref().child(level).push({ person: data });
   },
 };
+
+interface Numbers {
+  person : {
+    intials : string,
+    time : {
+      milliseconds: number,
+      minutes: number,
+      seconds: number,
+    }
+  }
+}
+
+interface Person {
+  intials : string,
+  time    : {
+    milliseconds : number,
+    minutes : number, 
+    seconds : number,
+  }
+}
+
+const orderTopThree = (people: Array<any>) => {
+  for (let i=0; i < 2; i++) {
+    let personA : Person = people[i];
+
+    for (let j=1; j < 3; j++) {
+      let personB : Person = people[j];
+
+      if (personA.time.seconds > personB.time.seconds) {
+        let tradePerson = personA;
+        personA = personB;
+        personB = tradePerson;
+      } else if (personA.time.milliseconds > personB.time.milliseconds && personA.time.seconds === personB.time.seconds) {
+        let tradePerson = personA;
+        personA = personB;
+        personB = tradePerson;
+      }
+
+      people[i] = personA;
+      people[j] = personB;
+    }
+  }
+
+  return people;
+}
+
+const grabTopThree = (people: Array<any>) => {
+  let results = [];
+
+  for (let j=0; j < people.length; j++) {
+    let person : Person = people[j].person;
+
+    if (results.length < 3) {
+      results.push(person);
+    } else {
+      let seconds : number = person.time.seconds,
+      milliseconds: number = person.time.milliseconds;
+
+      for (let i=0; i < 3; i++) {
+        if (seconds < results[i].person.time.seconds) {
+          results = results.splice(i, 1, person);
+        } else if (milliseconds < results[i].person.time.seconds && seconds === results[i].person.time.seconds) {
+          results = results.splice(i, 1, person);
+        }
+      }
+    }
+  }
+  return results;
+}
 
 const grabData = () => {
   fetch('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json',

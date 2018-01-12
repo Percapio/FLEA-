@@ -48,7 +48,6 @@ const createScore = document.querySelector('#enter-score'),
 function setup() {
 	player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
 		() => thrusters(), () => pauseGame() );
-	util = new Util( music );
 
 	util.grabData( () => makeBoard());
 }
@@ -222,6 +221,9 @@ function togglegame() {
 }
 
 function play() {
+	util = new Util(music);
+	util.scoreboard();
+
 	pauseModal(pause, 'player');
 	playerCtrl = setInterval(playerCtrlWhilePaused(), 40);
 }
