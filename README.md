@@ -1,15 +1,34 @@
 # Gate is Down
 
-## Project Description
-	
-  
+  [LIVE on Firebase.com](https://gate-is-down.firebaseapp.com/)
 
-### Game Design
-  1. User control and interaction
-  2. Pre-programmed routes for enemy AI
-  3. Collision implementation.
-  4. Well thought out level designs. 
-  6. Modal to explain gameplay
-  7. Users scoreboard and database
+#### Summary
 
+  You must flee!!  Time is running out there is only 30 seconds left, and you must reach safety.  Head towards the gate, but watch out for the Hackers in Space!  Each time you fire your forward or reverse thrusters, they can sense you and they will come in droves!  So, move swiftly, but glide safely to freedom.
+
+#### Game Design
+  1. User control and interactions
+  2. Computer is generated via a web-scraping function
+  3. Cloud database that stores users scoreboard and AI information
+  3. Collision implementation
+  6. Interactive win, lose, and pause
+
+---
+###### Technologies
+  + NodeJS
+  + Firebase
+  + Canvas
+
+###### Languages
+  + JavaScript
+  + TypeScript
+
+###### Dependencies
+  + [Fetch](https://www.npmjs.com/package/fetch)
+
+---
+#### Coming Soon...
+  + Additional web-scraping functions for bigger and badder Hackers in Space
+  + Additional levels
+  + Larger maps, and a smoother experience
 

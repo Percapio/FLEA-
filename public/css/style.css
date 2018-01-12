@@ -65,7 +65,8 @@ input[type="submit"] {
 /* Styling */
 body {
 	background-color: rgba(0, 0, 0, 1);
-  font-family: 'Orbitron Bold';
+  font-family: 'Orbitron';
+  font-weight: 700;
 }
 
 #container {
@@ -104,7 +105,8 @@ body {
 
 .summary {
   background: rgba(26, 20, 20, 0.2);
-  font-family: 'Orbitron Light';
+  font-family: 'Orbitron';
+  font-weight: 400;
   font-size: 20px;
   width: 650px;
 }
@@ -133,21 +135,21 @@ body {
 .modal-pause {
   background-color: rgba(26, 20, 20, 0.4);
   padding-bottom: 0.8%;
-  padding: 15px;
+  padding: 13px;
 }
 
 .modal-lose {
-  padding: 175px;
-  padding-left: 510px;
-  padding-right: 510px;
+  padding: 171px;
+  padding-left: 530px;
+  padding-right: 537px;
 }
 
 .modal-win {
   border: 1px solid white;
   box-shadow: inset 0 0 15px green;
-  padding: 142px;
-  padding-left: 487px;
-  padding-right: 490px;
+  padding: 138px;
+  padding-left: 506px;
+  padding-right: 526px;
 }
 
 #enter-score {
@@ -175,7 +177,8 @@ body {
 
 #error-message {
   color: red;
-  font-family: 'Orbitron Light';
+  font-family: 'Orbitron';
+  font-weight: 400;
   font-size: 20px;
   margin-top: 10px;
 }

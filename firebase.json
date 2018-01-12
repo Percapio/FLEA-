@@ -4,6 +4,18 @@
     "public": "public",
     "ignore": [
       "/node_modules/",
+      "./public/data/password.txt",
+      "*.ts",
+      "*.map",
+      "*.zip"
+    ]
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
     ]
   }
 }
