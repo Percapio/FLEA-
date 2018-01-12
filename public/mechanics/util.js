@@ -1,11 +1,13 @@
 // const $ = require('jQuery');
-import { checkAndReturn } from '../data/controllers';
+import { checkAndReturn, grabScores, makeScore } from '../data/controllers';
 
 export default class Util {
 	constructor( music ) {
 		this.data = [];
 		this.music = music;
 		this.music.volume = 0.2;
+
+		this.level = 1;
 
 		this.seperateData = this.seperateData.bind(this);
 	}
@@ -17,6 +19,19 @@ export default class Util {
 	grabData(makeBoard) {
 		checkAndReturn(this.seperateData, makeBoard, this.music);
 		this.music.play();
+	}
+
+	scoreBoard() {
+
+	}
+
+	createScore(time, initials) {
+		let person = {
+			time: time,
+			initials: initials,
+		};
+
+		makeScore(person, this.level);
 	}
 
 	seperateData(hackers) {

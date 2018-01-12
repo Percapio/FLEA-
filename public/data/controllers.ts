@@ -5,6 +5,7 @@ const fb     = require('firebase'),
       fetch  = require('fetch').fetchUrl;
 
 //*** Config Firebase */
+// Please don't steal my ID
 const config = {
   apiKey: "AIzaSyAEHSPRcDAzru_95S8TAqMLLRYkU-pkZMM",
   authDomain: "gate-is-down.firebaseapp.com",
@@ -33,7 +34,7 @@ module.exports = {
       .catch(error => console.log(error));
   },
 
-  inputInitials() {
+  grabScores() {
     console.log('BBB')
   },
 
@@ -41,8 +42,8 @@ module.exports = {
     console.log('last place')
   },
 
-  topThreePlayers() {
-    console.log('{ Dude, Bob, George }')
+  makeScore(data: any, level: number) {
+    db.ref().child(level).set({ person: data });
   },
 };
 

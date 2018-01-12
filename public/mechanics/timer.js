@@ -7,13 +7,13 @@ export default class Timer {
 		this.ctx = ctx;
 		this.endGame = endGame;
 
-		this.minute = 0;
+		this.minutes = 0;
 		this.seconds = 30;
 		this.milliseconds = 1; 
 	}
 
 	gameEnd() {
-		if (this.minute === 0 && this.seconds === 0 && this.milliseconds === 0) {
+		if (this.minutes === 0 && this.seconds === 0 && this.milliseconds === 0) {
 			this.endGame();
 		}
 	}
@@ -22,7 +22,7 @@ export default class Timer {
 		this.millisecondsCheck();
 		this.secondsCheck();
 		// minuteCheck();
-		let minutes = this.lessThanTen(this.minute);
+		let minutes = this.lessThanTen(this.minutes);
 		let milliseconds = this.lessThanTen(this.milliseconds);
 		let seconds = this.lessThanTen(this.seconds);
 		return `${minutes} : ${seconds} : ${milliseconds}`;
@@ -33,7 +33,7 @@ export default class Timer {
 
 	secondsCheck() {
 		if (this.seconds < 0) {
-			this.minute -= 1;
+			this.minutes -= 1;
 			this.seconds = 59;
 		}
 	}

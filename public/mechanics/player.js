@@ -39,6 +39,7 @@ export default class Player extends MovingObject {
 					break;
 				case 's':
 					this.thrust(false, true);
+					this.thrusters();
 					break;				
 				case 'ArrowDown':
 					this.thrust(false, true);
@@ -46,7 +47,6 @@ export default class Player extends MovingObject {
 					break;
 				case 'a':
 					this.turn(true, false);
-					this.thrusters();
 					break;				
 				case 'ArrowLeft':
 					this.turn(true, false);

@@ -86,7 +86,7 @@ body {
   box-sizing: border-box;
 }
 
-.modal-content-flex, .modal-form {
+.modal-content-flex, .modal-content-flex-end {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,7 +94,7 @@ body {
   box-sizing: border-box;
 }
 
-.modal-form {
+.modal-content-flex-end {
   flex-direction: column;
 }
 
@@ -125,21 +125,18 @@ body {
   height: 100%;
 }
 
-.modal-pause, .modal-lose, .modal-win {
-  background-color: rgba(26, 20, 20, 0.4);
-  padding: 20px;
-}
-
 .modal-pause, .modal-lose {
   border: 1px solid red;
   box-shadow: inset 0 0 15px red;
 }
 
 .modal-pause {
+  background-color: rgba(26, 20, 20, 0.4);
   padding-bottom: 0.8%;
+  padding: 15px;
 }
 
-.modal-lose, .modal-win {
+.modal-lose {
   padding: 175px;
   padding-left: 510px;
   padding-right: 510px;
@@ -148,6 +145,20 @@ body {
 .modal-win {
   border: 1px solid white;
   box-shadow: inset 0 0 15px green;
+  padding: 142px;
+  padding-left: 487px;
+  padding-right: 490px;
+}
+
+#enter-score {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.button-win {
+  margin-top: 20px;
 }
 
 .input-lose:hover {
@@ -156,10 +167,17 @@ body {
   cursor: pointer;
 }
 
-.input-win:hover {
+.button-win:hover {
   text-decoration: none;
   cursor: pointer;
   color: #08C014;
+}
+
+#error-message {
+  color: red;
+  font-family: 'Orbitron Light';
+  font-size: 20px;
+  margin-top: 10px;
 }
 
 .image-box {

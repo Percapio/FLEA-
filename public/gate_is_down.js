@@ -32,9 +32,16 @@ const hackers = [];
 
 let hostile = false;
 let pause   = true;
-let game, playerCtrl;
+let inGame  = true;
+let game, playerCtrl, time;
 let gameState = 0;
 let close = document.querySelector('close');
+
+const createScore = document.querySelector('#enter-score'),
+					 submit = document.querySelector('#submit'),
+					 errors = document.querySelector('#error-message');
+
+
 
 
 // Initial setup of player, stars, and computer
@@ -98,13 +105,46 @@ function thrusters() {
 }
 
 // End of game
+function getTime() {
+	return {
+		minutes: view.timer.minutes,
+		seconds: view.timer.seconds,
+		milliseconds: view.timer.milliseconds,
+	};
+}
+
 function endGame() {
+	inGame = false;
 	togglePause('lose');
 }
 
 function winGame() {
 	togglePause('win');
+	time = getTime();
+	submit.onclick = () => {
+		let missingName = true;
+		
+		while (missingName) {
+			missingName = addInitials();
+		}
+
+		document.location.reload();
+	};
 }
+
+function addInitials() {
+	let initials = createScore.value;
+
+	if (/^[A-Za-z]+$/.test(initials)) {
+		util.createScore(time, initials);
+		return false;
+	} else {
+		errors.insertAdjacentHTML('afterbegin', 'Letters only please.');
+		document.querySelector('.button-win').style.marginTop = 0;
+		return true;
+	}
+}
+
 
 function pauseGame() {
 	togglePause('player');
@@ -121,6 +161,7 @@ function togglePause(propPause) {
 		util.music.pause();
 		clearInterval(game);
 		playerCtrl = setInterval( playerCtrlWhilePaused(), 40 );
+
 	} else {
 		pauseModal(pause, propPause);
 		
@@ -150,10 +191,18 @@ function playerCtrlWhilePaused() {
 
 		switch (keypress) {
 			case ' ':
-				togglePause('player');
+				if (inGame) {
+					togglePause('player');
+				} else {
+					document.location.reload();
+				}
 				break;
 			case 'Escape':
-				togglePause('player');
+				if (inGame) {
+					togglePause('player')
+				} else {
+					document.location.reload();
+				}
 				break;
 		}
 

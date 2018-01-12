@@ -1,5 +1,6 @@
 var fb = require('firebase'), fetch = require('fetch').fetchUrl;
 //*** Config Firebase */
+// Please don't steal my ID
 var config = {
     apiKey: "AIzaSyAEHSPRcDAzru_95S8TAqMLLRYkU-pkZMM",
     authDomain: "gate-is-down.firebaseapp.com",
@@ -22,14 +23,14 @@ module.exports = {
             music.play();
         })["catch"](function (error) { return console.log(error); });
     },
-    inputInitials: function () {
+    grabScores: function () {
         console.log('BBB');
     },
     userPosition: function () {
         console.log('last place');
     },
-    topThreePlayers: function () {
-        console.log('{ Dude, Bob, George }');
+    makeScore: function (data, level) {
+        db.ref().child(level).set({ person: data });
     }
 };
 var grabData = function () {
