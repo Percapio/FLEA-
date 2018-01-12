@@ -135,21 +135,21 @@ body {
 .modal-pause {
   background-color: rgba(26, 20, 20, 0.4);
   padding-bottom: 0.8%;
-  padding: 13px;
+  padding: 15px;
 }
 
 .modal-lose {
-  padding: 171px;
-  padding-left: 530px;
-  padding-right: 537px;
+  padding: 175px;
+  padding-left: 512px;
+  padding-right: 512px;
 }
 
 .modal-win {
   border: 1px solid white;
   box-shadow: inset 0 0 15px green;
-  padding: 138px;
-  padding-left: 506px;
-  padding-right: 526px;
+  padding: 142px;
+  padding-left: 489px;
+  padding-right: 488px;
 }
 
 #enter-score {

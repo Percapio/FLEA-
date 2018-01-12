@@ -17,8 +17,10 @@ export default class Player extends MovingObject {
 		this.angle = 0;
 	}
 
-	move(thrusters) {
+	move(pause) {
+		if (pause) return;
 		let down = true;
+
 
 		document.onkeydown = (event) => {
 			if (event.repeat != undefined) {

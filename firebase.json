@@ -3,11 +3,7 @@
     "rules": "database.rules.json",
     "public": "public",
     "ignore": [
-      "/node_modules/",
-      "./public/data/password.txt",
-      "*.ts",
-      "*.map",
-      "*.zip"
+      "/node_modules/"
     ]
   },
   "hosting": {
@@ -15,7 +11,11 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      ".DS_Store",
+      "./public/data/password.txt",
+      "src/**/**/*.ts",
+      "src/**/**/*.map"
     ]
   }
 }

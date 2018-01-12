@@ -74,7 +74,7 @@ function makeBoard() {
 function draw() {
 	view.render();
 	moveObjects();
-	player.move();
+	player.move(pause);
 	player.update();
 }
 
@@ -118,6 +118,7 @@ function endGame() {
 }
 
 function winGame() {
+	inGame = false;
 	togglePause('win');
 	time = getTime();
 	submit.onclick = () => {
@@ -177,7 +178,6 @@ function togglePause(propPause) {
 }
 
 function playerCtrlWhilePaused() {
-	// close.onclick = shut(() => togglePause());
 	let down = true;
 
 	document.onkeydown = (event) => {

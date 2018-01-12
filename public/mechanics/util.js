@@ -1,6 +1,6 @@
 // const $ = require('jQuery');
 import { checkAndReturn, grabScores, makeScore } from '../data/controllers';
-// import { renderScoreboard } from '../ui/scoreboard';
+import { renderScoreboard } from '../ui/scoreboard';
 
 export default class Util {
 	constructor( music ) {
@@ -23,29 +23,8 @@ export default class Util {
 	}
 
 	scoreboard() {
-		grabScores(this.level, this.renderScoreboard);
+		grabScores(this.level, renderScoreboard);
 	}
-
-	renderScoreboard(people) {
-    let scoreboard = document.querySelector('.scoreboard');
-
-    for (let i=2; i > -1 ; i--) {
-			let person = people[i];
-
-      let newTDname = document.createElement('td');
-      newTDname.innerHTML = `${person.initials}`;
-			
-			let newTDtime = document.createElement('td');
-			newTDtime.innerHTML = `${person.time.minutes}:${person.time.seconds}:${person.time.milliseconds}`;
-			
-			let newTR = document.createElement('tr');
-
-			newTR.appendChild(newTDname);
-			newTR.appendChild(newTDtime);
-
-      scoreboard.appendChild(newTR);
-    }
-  }
 
 	createScore(time, initials) {
 		let person = {

@@ -1,5 +1,6 @@
+.DS_Store
 /node_modules/
 ./public/data/password.txt
-*.ts
-*.map
-*.zip
+src/**/**/*.ts
+src/**/**/*.map
+src/public/data/*.txt
