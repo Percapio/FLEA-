@@ -15,17 +15,12 @@ module.exports = {
                     lose.style.display = 'block';
                     break;
                 case 'win':
-                    alert('hello');
                     win.style.display = 'block';
                     break;
                 default:
                     return;
             }
         }
-    },
-    shut: function (togglePause) {
-        modal.style.display = 'none';
-        togglePause('player');
     }
 };
 //# sourceMappingURL=modal.js.map

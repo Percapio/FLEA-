@@ -4,7 +4,7 @@
 <head>
 	<title>Javascript Project Proposal</title>
 	<meta charset= "UTF-8">
-	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland" />
+
 	<link rel= 'stylesheet' type="text/css" href='./css/style.css' />
 </head>
 
@@ -22,38 +22,52 @@
 			style= 'z-index: 0; position: absolute;'></canvas>
 
 			<div class='modal-container' id='modal'>
-				<div class='modal-flex'>
-					<div id='modal-content-pause'>
+				<div id='modal-content-pause'>
+					<div class='modal-pause'>
 						<div class='modal-content-flex'>
 							<div class='image-box'>
 								<img src="./assets/keyboard/keyboard.png" alt="keyboard commands" class='key-commands'>
 							</div>
 							<div class='introduction'>
-								<textarea class='summary' rows='10' cols='40'>You have two minutes to escape!  Get to the Gate (blue rings in the lower right corner).  Seems easy enough, right?  Wrong!  Everytime you fire your forward/reverse thrusters, the Hackers in Space will catch your scent and come for you. So, each movement counts, and drift by as best as you can.
-								Good luck!</textarea>
-								<p>Spacebar to unpause</p>
+								<br/><br/>
+								<p class='summary'>> You have 30 seconds to escape!</p>
+								<br/>
+								<p class='summary'>> Get to the Gate in the lower left corner.</p>
+								<br/>
+								<p class='summary'>> Everytime you fire your forward or reverse thrusters,</p>
+								<br/>
+								<p class='summary'>> the Hackers in Space will catch your scent and come for you.</p>
+								<br/>
+								<p class='summary'>> So, each movement counts, and drift by as best as you can.</p>
+								<br/>
+								<p class='summary'>> Good luck!</p>
+								<br/><br/><br/>
+								<p class='unpause'>Spacebar to unpause</p>
+								<br/><br/>
 							</div>
 						</div>
 					</div>
-					<div id='modal-content-lose'>
+				</div>
+				<div id='modal-content-lose'>
+					<div class= 'modal-lose'>
 						<div class='modal-content-flex'>
 							<form class='modal-form'>
 								<p class='text-lose'>You Lose.</p>
-								<input type='text' placeholder="AAA" />
-								<input class='input-lose' type='submit' placeholder="Submit" />
+								<input class='input-lose' type='submit' id='retry' value="Retry" />
 							</form>
 						</div>
 					</div>
-					<div id='modal-content-win'>
+				</div>
+				<div id='modal-content-win'>
+					<div class= 'modal-win'>
 						<div class='modal-content-flex'>
 							<form class='modal-form'>
 								<p class='text-win'>You Win!</p>
 								<input type='text' placeholder="AAA" />
-								<input type='submit' class='input-win' placeholder="Submit" />
+								<input type='submit' class='input-win' id='submit' value="Submit" />
 							</form>
 						</div>
 					</div>
-					<span id="close">&times;</span>
 				</div>
 			</div>
 		</div>

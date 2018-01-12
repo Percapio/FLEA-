@@ -1,7 +1,7 @@
 import MovingObject from './moving_object';
 
 export default class Player extends MovingObject {
-	constructor(width, height, ctx, origin, thrusters, pause) {
+	constructor(width, height, ctx, origin, thrusters, pauseGame) {
 		super(width, height, ctx);
 		this.pos = origin;
 		this.image = new Image();
@@ -11,7 +11,7 @@ export default class Player extends MovingObject {
 
 		this.vel = [ 0, 0 ];
 		this.thrusters = thrusters;
-		this.pause = pause;
+		this.pauseGame = pauseGame;
 
 		this.head = [ 0, 0 ];
 		this.angle = 0;
@@ -19,7 +19,6 @@ export default class Player extends MovingObject {
 
 	move(thrusters) {
 		let down = true;
-		let prop = 'player';
 
 		document.onkeydown = (event) => {
 			if (event.repeat != undefined) {
@@ -59,10 +58,10 @@ export default class Player extends MovingObject {
 					this.turn(false, true);
 					break;
 				case ' ':
-					this.pause(prop);
+					this.pauseGame();
 					break;
 				case 'Escape':
-					this.pause(prop);
+					this.pauseGame();
 					break;
 			}
 		}

@@ -2,14 +2,14 @@ import Gate from './gate';
 import Timer from './timer';
 
 export default class GameView {
-	constructor(width, height, ctx, ctxUI, stars, pause, player) {
+	constructor(width, height, ctx, ctxUI, stars, winGame, player, endGame) {
 		this.width = width;
 		this.height = height;
 		this.ctx = ctx;
 		this.stars = stars;
 
-		this.gate = new Gate ( width, height, ctx, pause, player );
-    this.timer = new Timer( width, 50, ctxUI, pause );
+		this.gate = new Gate ( width, height, ctx, winGame, player );
+    this.timer = new Timer( width, 50, ctxUI, endGame );
 	}
 
 	// Background & Backdrop

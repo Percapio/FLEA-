@@ -18,7 +18,7 @@ span, article, footer, time, small {
   display: block;
   word-wrap: inherit;
   box-sizing: inherit;
-  font-family: 'Roboto', sans-serif;
+  font-family: inherit;
 }
 
 ul, li {
@@ -48,11 +48,24 @@ button,
 input[type="submit"] {
   cursor: pointer;
 }
+ 
+/* Font Family */
+@font-face {
+  font-family: "Orbitron Bold";
+  src: url("../assets/fonts/orbitron-master/webfonts/Orbitron-bold-webfont.eot");
+  src: url("../assets/fonts/orbitron-master/webfonts/Orbitron-bold-webfont.woff") format("woff"), url("../assets/fonts/orbitron-master/webfonts/Orbitron-bold-webfont.otf") format("opentype"), url("../assets/fonts/orbitron-master/webfonts/Orbitron-bold-webfont.svg#filename") format("svg");
+}
 
+@font-face {
+  font-family: "Orbitron Light";
+  src: url("../assets/fonts/orbitron-master/webfonts/Orbitron-light-webfont.eot");
+  src: url("../assets/fonts/orbitron-master/webfonts/Orbitron-light-webfont.woff") format("woff"), url("../assets/fonts/orbitron-master/webfonts/Orbitron-light-webfont.otf") format("opentype"), url("../assets/fonts/orbitron-master/webfonts/Orbitron-light-webfont.svg#filename") format("svg");
+}
 
 /* Styling */
 body {
 	background-color: rgba(0, 0, 0, 1);
+  font-family: 'Orbitron Bold';
 }
 
 #container {
@@ -61,50 +74,24 @@ body {
 	flex-direction: column;
 }
 
-button {
-  margin: 0 auto;
-  background: white;
-  color: black;
-  border: 1px solid red;
-  width: 25%;
-}
-
 .modal-container {
   display: none;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
   overflow: auto;
-  background: black;
-  background: rgba(26, 20, 20, 0.2);
+  background: rgba(26, 20, 20, 0.4);
   color: white;
+  box-sizing: border-box;
 }
 
-.modal-flex, .modal-content-flex, .modal-form {
+.modal-content-flex, .modal-form {
   display: flex;
   justify-content: center;
-  align-content: center;
   align-items: center;
-  /* background-color: #a5a5a5; */
-}
-
-.modal-flex {
-  margin: 0 auto;
-  margin: 5%;
-  height: 80%;
-  border: 1px solid red;
-  position: relative;
-}
-
-.modal-content-flex {
   height: 100%;
-}
-
-.modal-content-flex > p {
-  display: block;
+  box-sizing: border-box;
 }
 
 .modal-form {
@@ -112,13 +99,14 @@ button {
 }
 
 .introduction {
-  margin-right: 10%;
+  box-sizing: content-box;
 }
 
 .summary {
-  resize: none;
-  text-indent: 20px;
   background: rgba(26, 20, 20, 0.2);
+  font-family: 'Orbitron Light';
+  font-size: 20px;
+  width: 650px;
 }
 
 .text-lose {
@@ -133,24 +121,36 @@ button {
 
 .modal-content-pause, .modal-content-lose, .modal-content-win {
   display: none;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  width: 90%;
-  height: 90%;
-}
-
-#close {
-  color: #ccc;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
   position: absolute;
-  top: 10px;
-  right: 20px;
+  height: 100%;
 }
 
-#close:hover, #close:focus, .input-lose:hover {
+.modal-pause, .modal-lose, .modal-win {
+  background-color: rgba(26, 20, 20, 0.4);
+  padding: 20px;
+}
+
+.modal-pause, .modal-lose {
+  border: 1px solid red;
+  box-shadow: inset 0 0 15px red;
+}
+
+.modal-pause {
+  padding-bottom: 0.8%;
+}
+
+.modal-lose, .modal-win {
+  padding: 175px;
+  padding-left: 510px;
+  padding-right: 510px;
+}
+
+.modal-win {
+  border: 1px solid white;
+  box-shadow: inset 0 0 15px green;
+}
+
+.input-lose:hover {
   color: red;
   text-decoration: none;
   cursor: pointer;
@@ -163,13 +163,9 @@ button {
 }
 
 .image-box {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: rgba(255, 255, 255, 0.1);
-  margin-right: 20px;
-  margin-left: 10%;
+  margin-right: 2%;
+  margin-left: 1%;
 }
 
 .key-commands {
@@ -199,7 +195,6 @@ h1 {
   -moz-transition: all 0.5s;
   transition: all 0.5s;
 
-  font-family: Iceland;
   -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
   -moz-animation: neon1 1.5s ease-in-out infinite alternate;
   animation: neon1 1.5s ease-in-out infinite alternate;

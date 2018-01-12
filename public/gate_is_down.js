@@ -7,7 +7,7 @@ import GameView from './mechanics/game_view';
 import Hacker from './mechanics/hacker';
 // import Hazard from './mechanics/hazard';
 
-import { pauseModal, shut } from './ui/modal';
+import { pauseModal } from './ui/modal';
 
 // Initial Settings
 const WIDTH = 1200;
@@ -40,7 +40,7 @@ let close = document.querySelector('close');
 // Initial setup of player, stars, and computer
 function setup() {
 	player = new Player( WIDTH, HEIGHT, ctxPlayer, origin,
-		() => thrusters(), () => togglePause() );
+		() => thrusters(), () => pauseGame() );
 	util = new Util( music );
 
 	util.grabData( () => makeBoard());
@@ -61,7 +61,7 @@ function makeBoard() {
 	}
 
 	view = new GameView( WIDTH, HEIGHT, ctx, ctxUI, stars,
-							() => togglePause(), player );
+							() => winGame(), player, () => endGame() );
 }
 
 // Rendering function
@@ -100,6 +100,14 @@ function thrusters() {
 // End of game
 function endGame() {
 	togglePause('lose');
+}
+
+function winGame() {
+	togglePause('win');
+}
+
+function pauseGame() {
+	togglePause('player');
 }
 
 // Pause Event and Ctrls

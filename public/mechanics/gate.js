@@ -1,14 +1,14 @@
 import MovingObject from './moving_object';
 
 export default class Gate extends MovingObject {
-	constructor(width, height, ctx, pause, player) {
+	constructor(width, height, ctx, winGame, player) {
 		super(width, height, ctx);
 
 		this.pos = [ this.width - 50, this.height - 50 ];
 		this.radius = 30;
 		this.shade = 'green';
 
-		this.pause = pause;
+		this.winGame = winGame;
 		this.player = player;
 
 		this.image = new Image();
@@ -22,8 +22,7 @@ export default class Gate extends MovingObject {
 
 	endScenario(player) {
 		if (this.collisionCheck(player)) {
-			let prop = 'win'
-			this.pause(prop);
+			this.winGame();
 		}
 	}
 }

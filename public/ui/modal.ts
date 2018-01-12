@@ -20,7 +20,6 @@ module.exports = {
           lose.style.display = 'block';
           break;
         case 'win':
-          alert('hello');
           win.style.display = 'block';
           break;
         default:
@@ -28,9 +27,4 @@ module.exports = {
       }
     }
   },
-
-  shut(togglePause) {
-    modal.style.display = 'none';
-    togglePause('player');
-  }
 }
