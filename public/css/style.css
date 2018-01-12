@@ -52,7 +52,6 @@ input[type="submit"] {
 
 /* Styling */
 body {
-  height: 100vh;
 	background-color: rgba(0, 0, 0, 1);
 }
 
@@ -80,32 +79,101 @@ button {
   height: 100%;
   overflow: auto;
   background: black;
-  background: rgba(0, 0, 0, .2);
+  background: rgba(26, 20, 20, 0.2);
+  color: white;
 }
 
-.modal-content {
-  background: rgba(0, 0, 0, .8);
+.modal-flex, .modal-content-flex, .modal-form {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  /* background-color: #a5a5a5; */
+}
+
+.modal-flex {
+  margin: 0 auto;
+  margin: 5%;
+  height: 80%;
+  border: 1px solid red;
+  position: relative;
+}
+
+.modal-content-flex {
+  height: 100%;
+}
+
+.modal-content-flex > p {
+  display: block;
+}
+
+.modal-form {
+  flex-direction: column;
+}
+
+.introduction {
+  margin-right: 10%;
+}
+
+.summary {
+  resize: none;
+  text-indent: 20px;
+  background: rgba(26, 20, 20, 0.2);
+}
+
+.text-lose {
+  color: red;
+  font-size: 32px;
+}
+
+.text-win {
+  color: #08C014;
+  font-size: 32px;
+}
+
+.modal-content-pause, .modal-content-lose, .modal-content-win {
+  display: none;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #ccc;
-  width: 80%;
+  width: 90%;
+  height: 90%;
 }
 
-.pause, .lose, .win {
-  display: none;
-}
-
-.close {
-  color: #aaa;
+#close {
+  color: #ccc;
   float: right;
   font-size: 28px;
   font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 20px;
 }
 
-.close:hover, .close:focus {
+#close:hover, #close:focus, .input-lose:hover {
   color: red;
   text-decoration: none;
   cursor: pointer;
+}
+
+.input-win:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: #08C014;
+}
+
+.image-box {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  margin-right: 20px;
+  margin-left: 10%;
+}
+
+.key-commands {
+  object-fit: contain;
 }
 
 .canvases {

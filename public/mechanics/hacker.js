@@ -47,25 +47,25 @@ export default class Hacker extends MovingObject {
 
 		if (this.movement <= 0) {
 			if (rangeX < 100 && rangeY < 100) {
-				this.thrust(true);
-				this.movement += 2;
+				this.thrust(true, false, 1);
+				this.movement += 1;
 			}
 
-			if (hostile && rangeX < 300 && rangeY < 300) {
-					this.thrust(true);
-					this.movement += 100;
+			if (hostile && rangeX < 150 && rangeY < 150) {
+					this.thrust(true, false, 2);
+					this.movement += 5;
 			}
 
 			if (hostile && rangeX < 200 && rangeY < 200) {
-					this.thrust(true);
-					this.movement += 100;
+					this.thrust(true, false, 3);
+					this.movement += 10;
 			}
 		} else if (this.movement > 0) {
 			this.decreaseSpeed();
 			this.movement -= 1;
 		}
 
-		this.collisionCheck(origin) ? endGame('lose') : null;
+		this.collisionCheck(origin) ? endGame() : null;
 	}
 
 	guide(pos, origin, speed) {

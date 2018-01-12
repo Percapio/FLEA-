@@ -21,7 +21,7 @@ export default class Util {
 
 	seperateData(hackers) {
 		let shuffled = this.shuffleData(hackers);
-		this.data = this.data.concat(shuffled.slice(0, Math.floor(shuffled.length / 4)));
+		this.data = this.data.concat(shuffled.slice(0, Math.floor(shuffled.length / 2)));
 	}
 
 	handleData(data) {

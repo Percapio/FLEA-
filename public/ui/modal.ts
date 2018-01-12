@@ -1,34 +1,36 @@
 const modal = document.getElementById('modal'),
-      btn   = document.getElementById('open'),
-      shut  = document.getElementsByClassName('close'),
-      pause = document.getElementsByClassName('pause'),
-      lose  = document.getElementsByClassName('lose'),
-      win   = document.getElementsByClassName('win');
+      pause = document.getElementById('modal-content-pause'),
+      lose = document.getElementById('modal-content-lose'),
+      win = document.getElementById('modal-content-win');
 
 module.exports = {
   pauseModal(paused: boolean, type: string) {
+    modal.style.display = 'none';
+    pause.style.display = 'none';
+    lose.style.display = 'none';
+    win.style.display = 'none';
+
     if (paused) {
       modal.style.display = 'block';
-    } else {
-      modal.style.display = 'none';
-      pause.style.display = 'none';
-      lose.style.display = 'none';
-      win.style.display = 'none';
-      return;
+      switch (type) {
+        case 'player':
+          pause.style.display = 'block';
+          break;
+        case 'lose':
+          lose.style.display = 'block';
+          break;
+        case 'win':
+          alert('hello');
+          win.style.display = 'block';
+          break;
+        default:
+          return;
+      }
     }
+  },
 
-    switch(type) {
-      case 'player':
-        pause.style.display = 'block';
-        break;
-      case 'lose':
-        lose.style.display = 'block';
-        break;
-      case 'win':
-        win.style.display = 'block';
-        break;
-      default:
-        return;
-    }
+  shut(togglePause) {
+    modal.style.display = 'none';
+    togglePause('player');
   }
 }

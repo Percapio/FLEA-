@@ -92,9 +92,9 @@ export default class MovingObject {
 	}
 
 	// Movement
-	thrust(pwr = true, breaks = false) {
+	thrust(pwr = true, breaks = false, burn) {
 		if (pwr && this.vel[0] < 3.2 || this.vel[1] < 3.2) {
-			this.boost(pwr);
+			this.boost(pwr, burn);
 		}
 
 		if (breaks && this.vel[0] > -3.2 && this.vel[1] > -3.2) {
@@ -102,33 +102,34 @@ export default class MovingObject {
 		}
 	}
 
-	boost(thrust) {
+	boost(thrust, burn = 1) {
 		// Inverse quadrant based boosts
+		let fire = burn;
 		let speed = this.CONST[0];
 		let direction = thrust ? 1 : -1;
 
 		// Quadrant I
 		if (this.pos[0] <= this.head[0] && this.pos[1] <= this.head[1]) {
-			this.vel[0] += speed * direction;
-			this.vel[1] += speed * direction;
+			this.vel[0] += speed * direction * burn;
+			this.vel[1] += speed * direction * burn;
 		} 
 
 		// Quadrant II
 		else if (this.pos[0] > this.head[0] && this.pos[1] <= this.head[1]) {
-			this.vel[0] -= speed * direction;
-			this.vel[1] += speed * direction;
+			this.vel[0] -= speed * direction * burn;
+			this.vel[1] += speed * direction * burn;
 		}
 
 		// Quadrant III
 		else if (this.pos[0] > this.head[0] && this.pos[1] > this.head[1]) {
-			this.vel[0] -= speed * direction;
-			this.vel[1] -= speed * direction;
+			this.vel[0] -= speed * direction * burn;
+			this.vel[1] -= speed * direction * burn;
 		}
 
 		// Quadrant IV
 		else if (this.pos[0] <= this.head[0] && this.pos[1] > this.head[1]) {
-			this.vel[0] += speed * direction;
-			this.vel[1] -= speed * direction;
+			this.vel[0] += speed * direction * burn;
+			this.vel[1] -= speed * direction * burn;
 		}
 	}
 

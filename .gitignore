@@ -1,2 +1,5 @@
 /node_modules/
 ./public/data/password.txt
+*.ts
+*.map
+*.zip

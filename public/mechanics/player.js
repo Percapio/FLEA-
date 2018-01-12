@@ -19,6 +19,7 @@ export default class Player extends MovingObject {
 
 	move(thrusters) {
 		let down = true;
+		let prop = 'player';
 
 		document.onkeydown = (event) => {
 			if (event.repeat != undefined) {
@@ -31,22 +32,22 @@ export default class Player extends MovingObject {
 			switch (keypress) {
 				case 'w':
 					this.thrust(true, false);
-					this.thrusters(this.pos, this.radius);
+					this.thrusters();
 					break;
 				case 'ArrowUp':
 					this.thrust(true, false);
-					this.thrusters(this.pos, this.radius);
+					this.thrusters();
 					break;
 				case 's':
 					this.thrust(false, true);
 					break;				
 				case 'ArrowDown':
 					this.thrust(false, true);
-					this.thrusters(this.pos, this.radius);
+					this.thrusters();
 					break;
 				case 'a':
 					this.turn(true, false);
-					this.thrusters(this.pos, this.radius);
+					this.thrusters();
 					break;				
 				case 'ArrowLeft':
 					this.turn(true, false);
@@ -57,12 +58,16 @@ export default class Player extends MovingObject {
 				case 'ArrowRight':
 					this.turn(false, true);
 					break;
-				case 'Space':
-					this.space('player');
+				case ' ':
+					this.pause(prop);
+					break;
+				case 'Escape':
+					this.pause(prop);
+					break;
 			}
 		}
 
-		document.onkeyup = (event) => { down = true };
+		document.onkeyup = (event) => { down = true; };
 	}
 
 	update() {

@@ -1,12 +1,22 @@
+import { pauseModal } from '../ui/modal';
+
 export default class Timer {
-	constructor(width, height, ctx) {
+	constructor(width, height, ctx, pause) {
 		this.width = width;
 		this.height = height;
 		this.ctx = ctx;
+		this.pause = pause;
 
-		this.minute = 2;
-		this.seconds = 40;
+		this.minute = 0;
+		this.seconds = 30;
 		this.milliseconds = 1; 
+	}
+
+	gameEnd() {
+		if (this.minute === 0 && this.seconds === 0 && this.milliseconds === 0) {
+			let prop = 'lose';
+			this.pause(prop);
+		}
 	}
 
 	countdown() {
