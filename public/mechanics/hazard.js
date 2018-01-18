@@ -9,7 +9,7 @@ export default class Hazard extends MovingObject {
 		this.pos = this.randomStart();
 
 		for (let i=0; i < 3; i++) {
-			this.checkLocation();
+			this.checkLocation( this.radius );
 		}
 
 		this.vel = [ 

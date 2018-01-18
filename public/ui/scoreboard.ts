@@ -11,8 +11,8 @@ module.exports = {
   renderScoreboard(people: Array<any>) {
     let scoreboard = document.querySelector('.scoreboard');
 
-    for (let i = 2; i > -1; i--) {
-      let person : Person = people[i];
+    for (let i = 0; i < people.length; i++) {
+      let person : Person = people[i].person;
 
       let newTDname = document.createElement('td');
       newTDname.innerHTML = `${person.initials}`;

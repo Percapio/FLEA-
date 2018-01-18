@@ -30,9 +30,10 @@ const stars = [];
 const hackers = [];
 // const hazards = [];
 
-let hostile = false;
-let pause   = true;
-let inGame  = true;
+let hostile  = false;
+let pause    = true;
+let inGame   = true;
+let loseSate = false;
 let game, playerCtrl, time;
 let gameState = 0;
 let close = document.querySelector('close');
@@ -40,8 +41,6 @@ let close = document.querySelector('close');
 const createScore = document.querySelector('#enter-score'),
 					 submit = document.querySelector('#submit'),
 					 errors = document.querySelector('#error-message');
-
-
 
 
 // Initial setup of player, stars, and computer
@@ -113,12 +112,15 @@ function getTime() {
 }
 
 function endGame() {
-	inGame = false;
+	inGame 	 = false;
+	loseSate = true;
+
 	togglePause('lose');
 }
 
 function winGame() {
 	inGame = false;
+
 	togglePause('win');
 	time = getTime();
 	submit.onclick = () => {
@@ -193,14 +195,18 @@ function playerCtrlWhilePaused() {
 				if (inGame) {
 					togglePause('player');
 				} else {
-					document.location.reload();
+					if (loseSate) {
+						document.location.reload();
+					}
 				}
 				break;
 			case 'Escape':
 				if (inGame) {
-					togglePause('player')
+					togglePause('player');
 				} else {
-					document.location.reload();
+					if (loseSate) {
+						document.location.reload();
+					}
 				}
 				break;
 		}

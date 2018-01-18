@@ -1,8 +1,8 @@
 module.exports = {
     renderScoreboard: function (people) {
         var scoreboard = document.querySelector('.scoreboard');
-        for (var i = 2; i > -1; i--) {
-            var person = people[i];
+        for (var i = 0; i < people.length; i++) {
+            var person = people[i].person;
             var newTDname = document.createElement('td');
             newTDname.innerHTML = "" + person.initials;
             var newTDtime = document.createElement('td');

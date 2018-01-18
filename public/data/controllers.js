@@ -27,9 +27,10 @@ module.exports = {
         var people = db.ref().child(level.toString());
         people.once('value')
             .then(function (data) {
-            var topThree = grabTopThree(Object.values(data.val()));
-            var orderedThree = orderTopThree(topThree);
-            renderScoreboard(orderedThree);
+            var arrayOfPeeps = Object.values(data.val());
+            var sortedPeople = mergeSort(arrayOfPeeps);
+            var topFive = topFivePeople(sortedPeople);
+            renderScoreboard(topFive);
         })["catch"](function (error) { return console.log(error); });
     },
     userPosition: function () {
@@ -39,47 +40,47 @@ module.exports = {
         db.ref().child(level).push({ person: data });
     }
 };
-var orderTopThree = function (people) {
-    for (var i = 0; i < 2; i++) {
-        var personA = people[i];
-        for (var j = 1; j < 3; j++) {
-            var personB = people[j];
-            if (personA.time.seconds > personB.time.seconds) {
-                var tradePerson = personA;
-                personA = personB;
-                personB = tradePerson;
-            }
-            else if (personA.time.milliseconds > personB.time.milliseconds && personA.time.seconds === personB.time.seconds) {
-                var tradePerson = personA;
-                personA = personB;
-                personB = tradePerson;
-            }
-            people[i] = personA;
-            people[j] = personB;
-        }
+var mergeSort = function (people) {
+    if (people.length === 1) {
+        return people;
     }
-    return people;
+    var midIdx = Math.floor(people.length / 2);
+    var midPerson = people[midIdx];
+    var mergeLeftPeople = people.slice(0, midIdx);
+    var left = mergeSort(mergeLeftPeople);
+    var mergeRightPeople = people.slice(midIdx);
+    var right = mergeSort(mergeRightPeople);
+    var sortedPeople = merge(left, right);
+    return sortedPeople;
 };
-var grabTopThree = function (people) {
-    var results = [];
-    for (var j = 0; j < people.length; j++) {
-        var person = people[j].person;
-        if (results.length < 3) {
-            results.push(person);
+var merge = function (left, right) {
+    var sortedPeople = [];
+    if (typeof left === 'undefined') {
+        return right;
+    }
+    else if (typeof right === 'undefined') {
+        return left;
+    }
+    while (left.length > 0 && right.length > 0) {
+        var personA = left[0].person;
+        var personB = right[0].person;
+        if (personA.time.seconds > personB.time.seconds) {
+            sortedPeople.push(left.shift());
+        }
+        else if (personA.time.seconds === personB.time.seconds) {
+            if (personA.time.milliseconds > personB.time.milliseconds) {
+                sortedPeople.push(left.shift());
+            }
         }
         else {
-            var seconds = person.time.seconds, milliseconds = person.time.milliseconds;
-            for (var i = 0; i < 3; i++) {
-                if (seconds < results[i].person.time.seconds) {
-                    results = results.splice(i, 1, person);
-                }
-                else if (milliseconds < results[i].person.time.seconds && seconds === results[i].person.time.seconds) {
-                    results = results.splice(i, 1, person);
-                }
-            }
+            sortedPeople.push(right.shift());
         }
     }
-    return results;
+    sortedPeople = sortedPeople.concat(left, right);
+    return sortedPeople;
+};
+var topFivePeople = function (people) {
+    return people.slice(0, 4);
 };
 var grabData = function () {
     fetchUrl.fetchUrl('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json', function (error, meta, body) {

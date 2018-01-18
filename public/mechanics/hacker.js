@@ -13,10 +13,10 @@ export default class Hacker extends MovingObject {
 		this.name = name;
 
 		for (let i=0; i < 3; i++) {
-			this.checkLocation();
+			this.checkLocation( this.radius );
 		}
 
-		this.vel = [ 0, 0 ]
+		this.vel = [ 0, 0 ];
 		this.head = [ 0, 0 ];
 		this.angle = 0;
 		this.movement = 0;

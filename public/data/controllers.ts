@@ -39,9 +39,11 @@ module.exports = {
 
     people.once('value')
       .then( data => {
-        let topThree = grabTopThree(Object.values(data.val()));
-        let orderedThree = orderTopThree(topThree);
-        renderScoreboard(orderedThree);
+        let arrayOfPeeps : Array<any> = Object.values( data.val() );
+        let sortedPeople : Array<any> = mergeSort( arrayOfPeeps );
+        let topFive      : Array<any> = topFivePeople( sortedPeople );
+
+        renderScoreboard( topFive );
       })
       .catch( error => console.log(error));
   },
@@ -75,56 +77,58 @@ interface Person {
   }
 }
 
-const orderTopThree = (people: Array<any>) => {
-  for (let i=0; i < 2; i++) {
-    let personA : Person = people[i];
-
-    for (let j=1; j < 3; j++) {
-      let personB : Person = people[j];
-
-      if (personA.time.seconds > personB.time.seconds) {
-        let tradePerson = personA;
-        personA = personB;
-        personB = tradePerson;
-      } else if (personA.time.milliseconds > personB.time.milliseconds && personA.time.seconds === personB.time.seconds) {
-        let tradePerson = personA;
-        personA = personB;
-        personB = tradePerson;
-      }
-
-      people[i] = personA;
-      people[j] = personB;
-    }
+const mergeSort = (people : Array<any>) : any => {
+  if (people.length === 1) {
+    return people;
   }
 
-  return people;
+  const midIdx    : number     = Math.floor(people.length / 2);
+  const midPerson : Array<any> = people[ midIdx ];
+
+  const mergeLeftPeople  : Array<any> = people.slice(0, midIdx);
+  const left             : Array<any> = mergeSort( mergeLeftPeople );
+
+  const mergeRightPeople : Array<any> = people.slice(midIdx);
+  const right            : Array<any> = mergeSort( mergeRightPeople );
+
+  let sortedPeople : Array<any> = merge( left, right );
+  return sortedPeople;
 }
 
-const grabTopThree = (people: Array<any>) => {
-  let results = [];
+const merge = (left : Array<any>, right : Array<any>) : any => {
+  let sortedPeople  : Array<any> = [];
 
-  for (let j=0; j < people.length; j++) {
-    let person : Person = people[j].person;
+  if (typeof left === 'undefined') {
+    return right;
+  } else if (typeof right === 'undefined') {
+    return left;
+  }
 
-    if (results.length < 3) {
-      results.push(person);
+  while (left.length > 0 && right.length > 0) {
+    let personA : any = left[0].person;
+    let personB : any = right[0].person;
+
+    if (personA.time.seconds > personB.time.seconds) {
+      sortedPeople.push( left.shift() );
+    
+    } else if (personA.time.seconds === personB.time.seconds) {
+      if (personA.time.milliseconds > personB.time.milliseconds) {
+        sortedPeople.push( left.shift() );
+      }
     } else {
-      let seconds : number = person.time.seconds,
-      milliseconds: number = person.time.milliseconds;
-
-      for (let i=0; i < 3; i++) {
-        if (seconds < results[i].person.time.seconds) {
-          results = results.splice(i, 1, person);
-        } else if (milliseconds < results[i].person.time.seconds && seconds === results[i].person.time.seconds) {
-          results = results.splice(i, 1, person);
-        }
-      }
+      sortedPeople.push( right.shift() );
     }
   }
-  return results;
+
+  sortedPeople = sortedPeople.concat(left, right);
+  return sortedPeople;
 }
 
-const grabData = () => {
+const topFivePeople = (people : Array<any>) : any => {
+  return people.slice(0, 4);
+}
+
+const grabData = () : void => {
   fetchUrl.fetchUrl('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json',
       (error: any, meta: any, body: any) => {
         const data    : Array<any> = JSON.parse(body.toString()).values;
