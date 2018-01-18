@@ -1,8 +1,8 @@
 declare var require : any;
 declare var module : any;
 
-const fb     = require('firebase'),
-      fetch  = require('fetch').fetchUrl;
+const fb      = require('firebase'),
+      fetchUrl= require('fetch');
 
 //*** Config Firebase */
 // Please don't steal my ID
@@ -23,7 +23,7 @@ const firebase = fb.initializeApp(config),
 
 module.exports = {   
   checkAndReturn(seperateData, makeBoard, music) {
-    const getHackers : Array<any> = db.ref().child('hackers');
+    const getHackers : any = db.ref().child('hackers');
 
     getHackers.once('value')
       .then(data => {
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   grabScores(level: number, renderScoreboard) {
-    const people : Array<any> = db.ref().child(level.toString());
+    const people : any = db.ref().child(level.toString());
 
     people.once('value')
       .then( data => {
@@ -125,7 +125,7 @@ const grabTopThree = (people: Array<any>) => {
 }
 
 const grabData = () => {
-  fetch('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json',
+  fetchUrl.fetchUrl('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json',
       (error: any, meta: any, body: any) => {
         const data    : Array<any> = JSON.parse(body.toString()).values;
         let actorId   : number = 0;

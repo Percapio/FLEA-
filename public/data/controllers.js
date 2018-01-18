@@ -1,4 +1,4 @@
-var fb = require('firebase'), fetch = require('fetch').fetchUrl;
+var fb = require('firebase'), fetchUrl = require('fetch');
 //*** Config Firebase */
 // Please don't steal my ID
 var config = {
@@ -82,7 +82,7 @@ var grabTopThree = function (people) {
     return results;
 };
 var grabData = function () {
-    fetch('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json', function (error, meta, body) {
+    fetchUrl.fetchUrl('https://cdn.rawgit.com/MISP/misp-galaxy/master/clusters/threat-actor.json', function (error, meta, body) {
         var data = JSON.parse(body.toString()).values;
         var actorId = 0;
         var webId = 0;

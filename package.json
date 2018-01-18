@@ -30,15 +30,12 @@
     "firebase": "^4.8.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.38",
     "@babel/core": "^7.0.0-beta.37",
     "@babel/preset-env": "^7.0.0-beta.37",
     "@babel/preset-typescript": "^7.0.0-beta.37",
-    "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.0-beta.0",
     "ts-loader": "^3.2.0",
     "typescript": "^2.6.2"
-  },
-  "quokka": {
-    "babel": true
   }
 }
