@@ -69,6 +69,40 @@ body {
   font-weight: 700;
 }
 
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 35%;
+  padding-right: 5%;
+  padding-top: 1%;
+}
+
+.header-container h1 {
+  flex: 2;
+}
+
+.links-to-me {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.links-to-me a {
+  width: 10%;
+  background: slategrey;
+  margin-left: 3%;
+}
+
+.links-to-me a:hover {
+  box-shadow: inset 0px 0px 20px white, 0px 0px 20px white;
+}
+
+.icons {
+  object-fit: contain;
+}
+
 #container {
 	padding-top: 30px;
 	display: flex;
